@@ -1,0 +1,1073 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vizu Course</title>
+<meta name="description" content="Learn C, then C++, by watching memory change: every C program runs here one line at a time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap">
+<style>:root{--paper:#f2f2ee;--sheet:#fbfbf8;--ink:#17181c;--ink-2:#4a4d55;--ink-3:#686b73;--rule:#d6d6ce;--rule-2:#e4e4dd;--pointer:#2a47c8;--read:#dce3ff;--write:#ffd27a;--on-write:#17181c;--error:#b8321f;--error-bg:#f9e3df;--freed:#8b8e96;--focus:#2a47c8;--yes:#1e7f4f;--yes-bg:#ddf1e5;--no:#c8364b;--no-bg:#f9e1e4;--f-text:"Atkinson Hyperlegible Next", "Segoe UI", Verdana, sans-serif;--f-mono:"Atkinson Hyperlegible Mono", "Cascadia Mono", Consolas, "Courier New", monospace;--t-xs:14px;--t-s:16px;--t-m:20px;--t-l:28px;--t-xl:40px;--r-cell:4px;--r-panel:8px}@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--paper:#15161a;--sheet:#1d1f24;--ink:#ecece8;--ink-2:#b9bbc3;--ink-3:#8d9099;--rule:#34363e;--rule-2:#2a2c33;--pointer:#8ea2ff;--read:#273058;--write:#ffd27a;--on-write:#17181c;--error:#ff7b66;--error-bg:#3a1e1a;--freed:#6f737c;--focus:#8ea2ff;--yes:#5bd08f;--yes-bg:#173826;--no:#ff7d93;--no-bg:#3d1e25;--lightningcss-light: ;--lightningcss-dark:initial;color-scheme:dark}}:root[data-theme=dark]{--paper:#15161a;--sheet:#1d1f24;--ink:#ecece8;--ink-2:#b9bbc3;--ink-3:#8d9099;--rule:#34363e;--rule-2:#2a2c33;--pointer:#8ea2ff;--read:#273058;--write:#ffd27a;--on-write:#17181c;--error:#ff7b66;--error-bg:#3a1e1a;--freed:#6f737c;--focus:#8ea2ff;--yes:#5bd08f;--yes-bg:#173826;--no:#ff7d93;--no-bg:#3d1e25;--lightningcss-light: ;--lightningcss-dark:initial;color-scheme:dark}*{box-sizing:border-box}html,body{background:var(--paper)}body{color:var(--ink);font:var(--t-s)/1.6 var(--f-text);-webkit-font-smoothing:antialiased}:focus-visible{outline:2px solid var(--focus);outline-offset:2px}a{color:inherit;-webkit-text-decoration-color:var(--rule);text-decoration-color:var(--rule);text-underline-offset:3px}a:hover{text-decoration-color:currentColor}code,pre,.mono{font-family:var(--f-mono)}button{font:inherit;color:inherit}.top{top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--rule);position:sticky}.top-in{align-items:center;gap:16px;padding:10px 20px;display:flex}.brand{font-weight:700;font-size:var(--t-m);letter-spacing:-.01em;align-items:center;gap:10px;text-decoration:none;display:flex}.brand svg{flex:none;width:34px;height:18px}.brand small{color:var(--ink-3);font-weight:400;font-size:var(--t-xs);letter-spacing:.02em}.top .grow{flex:1}.tracks{border:1px solid var(--rule);border-radius:var(--r-cell);display:flex;overflow:hidden}.tracks a{font-size:var(--t-xs);color:var(--ink-2);padding:4px 12px;text-decoration:none}.tracks a+a{border-left:1px solid var(--rule)}.tracks a[aria-current=true]{background:var(--ink);color:var(--paper)}.site{gap:4px;display:flex}.site a{font-size:var(--t-xs);color:var(--ink-2);border-radius:var(--r-cell);padding:4px 10px;text-decoration:none}.site a:hover{color:var(--ink);background:var(--rule-2)}.open-tool{border:1px solid var(--ink);border-radius:var(--r-cell);height:34px;font-size:var(--t-xs);white-space:nowrap;align-items:center;margin-left:6px;padding:0 12px;font-weight:700;text-decoration:none;display:none}.open-tool:hover{background:var(--rule-2)}body.with-tool .open-tool{display:inline-flex}.menu-btn{border:1px solid var(--rule);background:var(--sheet);border-radius:var(--r-cell);font-size:var(--t-xs);cursor:pointer;padding:4px 12px;display:none}.shell{grid-template-columns:264px minmax(0,1fr);display:grid}.side{border-right:1px solid var(--rule);top:calc(env(safe-area-inset-top,0px) + 53px);align-self:start;height:calc(100vh - 53px);padding:20px 16px 48px;position:sticky;overflow-y:auto}.side h2{font-size:var(--t-xs);color:var(--ink-3);letter-spacing:.02em;margin:0 0 8px;font-weight:700}.side ol{margin:0;padding:0;list-style:none}.mod>button{all:unset;box-sizing:border-box;border-radius:var(--r-cell);cursor:pointer;width:100%;font-size:var(--t-xs);gap:8px;padding:6px 8px;line-height:1.4;display:flex}.mod>button:hover{background:var(--rule-2)}.mod>button:focus-visible{outline:2px solid var(--focus)}.mod>button .n{font-family:var(--f-mono);color:var(--ink-3);min-width:1.6em}.mod.open>button{font-weight:700}.mod ol{padding:2px 0 8px 32px;display:none}.mod.open ol{display:block}.mod ol a{font-size:var(--t-xs);color:var(--ink-2);border-radius:var(--r-cell);padding:3px 8px;line-height:1.4;text-decoration:none;display:block}.mod ol a:hover{color:var(--ink);background:var(--rule-2)}.mod ol a[aria-current=page]{color:var(--ink);background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);font-weight:700}.side .home-link{font-size:var(--t-xs);border-radius:var(--r-cell);margin-bottom:16px;padding:6px 8px;text-decoration:none;display:block}.side .home-link[aria-current=page]{background:var(--sheet);box-shadow:inset 0 0 0 1px var(--rule);font-weight:700}main{min-width:0;padding:32px 36px 96px}.prose>:not(.lab):not(.table-wrap){max-width:68ch}.prose>.table-wrap{max-width:1180px}.prose>*+*{margin-top:1em}.prose h1{font-size:var(--t-xl);letter-spacing:-.02em;text-wrap:balance;margin:0;line-height:1.15}.prose h2{font-size:var(--t-l);letter-spacing:-.01em;text-wrap:balance;margin-top:2em;line-height:1.2}.prose h3{font-size:var(--t-m);margin-top:2em;line-height:1.3}.prose p,.prose li{color:var(--ink)}.prose ul,.prose ol{padding-left:1.4em}.prose li+li{margin-top:.4em}.prose :not(pre)>code{background:var(--sheet);border:1px solid var(--rule-2);border-radius:3px;padding:0 .25em;font-size:.92em}.prose strong{font-weight:700}.eyebrow{font-size:var(--t-xs);color:var(--ink-3);margin:0 0 8px}.eyebrow a{text-decoration:none}.wide{max-width:none}pre.code{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r-panel);tab-size:4;margin:0;padding:14px 16px;font-size:15px;line-height:1.5;overflow-x:auto}.k{font-weight:700}.c{color:var(--ink-3);font-style:italic}.s,.pp{color:var(--ink-2)}.table-wrap{overflow-x:auto}.prose table{border-collapse:collapse;width:100%;font-size:var(--t-xs)}.prose th,.prose td{text-align:left;vertical-align:top;border-bottom:1px solid var(--rule);padding:8px 12px 8px 0}.prose th{color:var(--ink-3);font-weight:700}details{border:1px solid var(--rule);border-radius:var(--r-panel);background:var(--sheet);margin-top:8px;padding:0 14px}details>summary{cursor:pointer;font-size:var(--t-xs);color:var(--ink-2);padding:8px 0;font-weight:700}details[open]{padding-bottom:12px}details>:not(summary){margin-top:.4em}.pager{border-top:1px solid var(--rule);flex-wrap:wrap;justify-content:space-between;gap:16px;max-width:68ch;margin-top:56px;padding-top:20px;display:flex}.pager a{flex-direction:column;gap:2px;max-width:48%;text-decoration:none;display:flex}.pager a span{font-size:var(--t-xs);color:var(--ink-3)}.pager a.next{text-align:right;margin-left:auto}.lab{border:1px solid var(--rule);border-radius:var(--r-panel);background:var(--sheet);max-width:1680px;margin:24px 0;container-type:inline-size}.lab:focus{outline:none}.lab:focus-visible{outline:2px solid var(--focus);outline-offset:2px}.lab-body{grid-template-columns:minmax(0,1fr);grid-template-areas:"cap""code""flow""mem";display:grid}.lab-code{border-bottom:1px solid var(--rule);flex-direction:column;grid-area:code;min-width:0;min-height:0;display:flex}.code-scroll{max-height:340px;font-family:var(--f-mono);padding:10px 0;font-size:14.5px;line-height:1.6;overflow:auto}.flow-wrap{border-bottom:1px solid var(--rule);grid-area:flow;min-width:0;height:440px;padding:14px 16px}.mem-wrap{--ram-group:72px;--ram-name:74px;--ram-addr:50px;--ram-byte:28px;grid-area:mem}.sys-wrap{border-top:1px solid var(--rule);padding:12px 16px 14px}@container (width>=760px){.lab-body{grid-template:"code cap"96px"code flow"460px"mem mem"/minmax(0,1fr) minmax(0,1fr)}.lab.asm .lab-body{grid-template-rows:96px 560px auto}.lab-code{border-bottom:none;border-right:1px solid var(--rule)}.code-scroll{flex:1;min-height:0;max-height:none}.flow-wrap{height:auto}.lab-body .caption{height:96px}.lab-body .mem-wrap{--ram-byte:40px;--ram-row:36px;--ram-name:100px;--ram-addr:62px;--ram-text:14.5px;height:400px}}@container (width>=1280px){.lab-body{grid-template:"code cap cap"96px"code flow mem"520px/minmax(0,.92fr) minmax(0,1fr) minmax(500px,1.08fr)}.lab.asm .lab-body{grid-template-rows:96px 560px}.flow-wrap{border-bottom:none;border-right:1px solid var(--rule)}.lab-body .mem-wrap{height:auto;max-height:none}}.lab.memonly .lab-body{display:block}.lab-arch{font-size:var(--t-xs);color:var(--ink-3);padding:8px 16px 0;font-weight:700}.lab.asm .cpu-wrap,.lab.asm .lab-body .mem-wrap{overflow:hidden}@container (width<=759px){.lab.asm .cpu-wrap{height:560px}}.lab.memonly .mem-wrap{--ram-byte:30px;--ram-row:30px;--ram-name:88px;--ram-addr:54px;--ram-text:13px}.ln{white-space:pre;grid-template-columns:3.2em minmax(0,1fr);padding-right:12px;display:grid}.ln .no{color:var(--ink-3);text-align:right;-webkit-user-select:none;user-select:none;font-variant-numeric:tabular-nums;padding-right:12px}.ln.cur{background:var(--rule-2);box-shadow:inset 3px 0 0 var(--ink)}.ln.cur .no{color:var(--ink);font-weight:700}.ln.bad{background:var(--error-bg);box-shadow:inset 3px 0 0 var(--error)}.ln.bad .no{color:var(--error)}.lab-input{border-top:1px solid var(--rule);font-size:var(--t-xs);color:var(--ink-3);padding:8px 14px}.lab-input code{color:var(--ink-2);white-space:pre-wrap}.lab-right{flex-direction:column;min-width:0;display:flex}.caption{border-bottom:1px solid var(--rule);font-size:var(--t-s);grid-area:cap;height:124px;padding:12px 16px;line-height:1.5;overflow-y:auto}.lab.memonly .caption{height:auto;min-height:4.8em}.caption code{background:var(--paper);border:1px solid var(--rule-2);border-radius:3px;padding:0 .25em;font-size:.92em}.caption .verdict{font-weight:700}.caption .why{color:var(--ink-2);font-size:var(--t-xs);margin-top:2px;display:block}.caption.err{background:var(--error-bg);color:var(--ink)}.caption.err .tag{color:var(--error);font-weight:700}.caption .warn{font-size:var(--t-xs);color:var(--ink-2);margin-top:6px;display:block}.caption .warn b{color:var(--ink)}.mem-wrap{min-width:0;height:460px;padding:16px;overflow:auto}.lab.memonly .mem-wrap{height:auto;max-height:560px}.mem{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px 44px;min-width:0;display:grid;position:relative}.mem.one{grid-template-columns:minmax(0,1fr)}.mem-col{flex-direction:column;gap:10px;min-width:0;display:flex}.mem-col>h4{font-size:var(--t-xs);color:var(--ink-3);margin:0;font-weight:700}.mem-col>h4 span{font-weight:400}.region{border:1px solid var(--rule);border-radius:var(--r-panel);background:var(--paper);flex-direction:column;gap:6px;min-width:0;padding:8px 10px 10px;display:flex}.region.running{border:2px solid var(--ink);padding:7px 9px 9px}.region.freed{border-style:dashed;border-color:var(--freed);opacity:.62}.region-h{font-size:var(--t-xs);flex-wrap:wrap;align-items:baseline;gap:8px;display:flex}.region-h b{font-family:var(--f-mono);font-size:14.5px}.region-h span{color:var(--ink-3)}.region-h .freed-tag{color:var(--ink-2);font-weight:700}.region .empty{font-size:var(--t-xs);color:var(--ink-3)}.var{grid-template-columns:minmax(4.5em,max-content) minmax(0,1fr);align-items:center;gap:2px 12px;display:grid}.vn{flex-direction:column;min-width:0;line-height:1.2;display:flex}.vn b{font-family:var(--f-mono);font-size:14.5px}.vn span{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-3);white-space:nowrap;text-overflow:ellipsis;line-height:1.3;overflow:hidden}.vv{flex-wrap:wrap;align-items:flex-start;gap:6px;min-width:0;display:flex}.vn .addr,.addr{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--pointer);font-variant-numeric:tabular-nums}.cellbox{text-align:center;flex-direction:column;align-items:stretch;gap:1px;min-width:3.5em;display:inline-flex}.cell{border:1.5px solid var(--ink);border-radius:var(--r-cell);min-width:2.7em;height:2em;font-family:var(--f-mono);background:var(--sheet);font-variant-numeric:tabular-nums;white-space:nowrap;justify-content:center;align-items:center;padding:0 .45em;font-size:14.5px;display:inline-flex}.cell.uninit,.cell.zero{color:var(--ink-3)}.cell.read{background:var(--read)}.cell.write,.cell.changed{background:var(--write);color:var(--on-write);border-color:var(--on-write)}.cell.ptr{min-width:2.7em}.cell.ptr .dot{background:var(--pointer);border-radius:50%;width:9px;height:9px}.cell.ptr.dangling .dot{background:var(--error)}.cell.ptr.null{color:var(--ink-3);font-size:12.5px}.cell.ptr.fn{color:var(--ink-2);font-size:13px}.cell.ghost{border:1.5px dashed var(--error);background:var(--error-bg);color:var(--error)}.caddr{font-family:var(--f-mono);color:var(--pointer);font-variant-numeric:tabular-nums;font-size:11px;line-height:1.2}.idx{font-family:var(--f-mono);color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:12px;line-height:1}.idx.bad{color:var(--error);font-weight:700}.arr{flex-wrap:wrap;align-items:flex-start;gap:0;display:flex}.arr .cellbox+.cellbox .cell{border-left-width:0;border-top-left-radius:0;border-bottom-left-radius:0}.arr .cellbox:not(:last-child) .cell{border-top-right-radius:0;border-bottom-right-radius:0}.arr .more{font-size:var(--t-xs);color:var(--ink-3);align-self:center;padding-left:8px}.struct{border:1px solid var(--rule);border-radius:var(--r-cell);background:var(--sheet);flex-direction:column;gap:4px;min-width:0;padding:6px 8px;display:flex}.struct .sh{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-3)}.field{grid-template-columns:minmax(3em,max-content) minmax(0,1fr);align-items:center;gap:8px;display:grid}.field>span{font-family:var(--f-mono);color:var(--ink-2);font-size:13.5px}.ret{font-size:var(--t-xs);color:var(--ink-2);border-top:1px dashed var(--rule);align-items:center;gap:8px;padding-top:6px;display:flex}.oob{font-size:var(--t-xs);color:var(--error);font-weight:700}svg.arrows{pointer-events:none;position:absolute;top:0;left:0;overflow:visible}svg.arrows path{fill:none;stroke:var(--pointer);stroke-width:2px}svg.arrows path.ref{stroke-dasharray:5 4}svg.arrows path.dangling{stroke:var(--error);stroke-dasharray:5 4}svg.arrows .head{fill:var(--pointer)}svg.arrows .head.dangling{fill:var(--error)}.out{border-top:1px solid var(--rule);padding:10px 16px}.out h5{font-size:var(--t-xs);color:var(--ink-3);margin:0 0 4px;font-weight:700}.out pre{font-family:var(--f-mono);white-space:pre-wrap;word-break:break-word;height:4.5em;margin:0;font-size:14px;line-height:1.5;overflow-y:auto}.out mark{background:var(--write);color:var(--on-write);border-radius:2px}.out .nothing{color:var(--ink-3)}.ctl{border-top:1px solid var(--rule);flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;display:flex}.ctl button{border:1px solid var(--rule);background:var(--paper);border-radius:var(--r-cell);cursor:pointer;min-width:36px;height:34px;font-size:var(--t-xs);justify-content:center;align-items:center;gap:6px;padding:0 10px;display:inline-flex}.ctl button:hover{border-color:var(--ink-3)}.ctl button:disabled{opacity:.4;cursor:default}.ctl button.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}.ctl input[type=range]{min-width:120px;accent-color:var(--ink);flex:1}.ctl .count{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ink-3);font-variant-numeric:tabular-nums;text-align:right;min-width:6.5em}.ctl svg{width:14px;height:14px}.lab-error{color:var(--error);font-size:var(--t-xs);padding:14px 16px}.hero{flex-direction:column;gap:16px;max-width:68ch;display:flex}.hero h1{letter-spacing:-.03em;text-wrap:balance;margin:0;font-size:52px;line-height:1.05}.hero p{font-size:var(--t-m);color:var(--ink-2);margin:0;line-height:1.5}.hero .actions{flex-wrap:wrap;gap:10px;margin-top:4px;display:flex}.btn{border-radius:var(--r-cell);border:1px solid var(--ink);font-weight:700;font-size:var(--t-xs);align-items:center;gap:8px;padding:8px 16px;text-decoration:none;display:inline-flex}.btn.solid{background:var(--ink);color:var(--paper)}.hero-note{font-size:var(--t-xs);color:var(--ink-3);max-width:1180px;margin-top:-12px}.section{margin-top:64px}.section>h2{font-size:var(--t-l);letter-spacing:-.01em;margin:0 0 6px}.section>p.lede{color:var(--ink-2);max-width:68ch;margin:0 0 20px}.books{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;max-width:1180px;display:grid}.books>div{border-top:2px solid var(--ink);flex-direction:column;gap:10px;min-width:0;padding-top:12px;display:flex}.books h3{font-size:var(--t-m);margin:0}.books h3 span{font-size:var(--t-xs);color:var(--ink-3);font-weight:400;display:block}.books dl{font-size:var(--t-xs);grid-template-columns:7.5em minmax(0,1fr);gap:6px 14px;margin:0;display:grid}.books dt{color:var(--ink-3)}.books dd{margin:0}.takes{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 40px;max-width:1180px;margin-top:32px;display:grid}.takes h3{font-size:var(--t-s);margin:0 0 6px}.takes p{font-size:var(--t-xs);color:var(--ink-2);margin:0}.track-list{border-top:1px solid var(--rule);max-width:1180px;margin:0;padding:0;list-style:none}.track-list li{border-bottom:1px solid var(--rule);grid-template-columns:2.6em minmax(10em,15em) minmax(0,1fr) auto;align-items:baseline;gap:4px 16px;padding:10px 0;display:grid}.track-list .n{font-family:var(--f-mono);color:var(--ink-3);font-variant-numeric:tabular-nums}.track-list a.t{font-weight:700;text-decoration:none}.track-list .ls{font-size:var(--t-xs);color:var(--ink-2)}.track-list .bk{font-size:var(--t-xs);color:var(--ink-3);white-space:nowrap}.parts{counter-reset:part;border:1px solid var(--rule);border-radius:var(--r-panel);background:var(--sheet);grid-template-columns:repeat(5,minmax(0,1fr));gap:0;max-width:1180px;margin:0;padding:0;list-style:none;display:grid}.parts li{border-left:1px solid var(--rule);counter-increment:part;font-size:var(--t-xs);color:var(--ink-2);padding:14px 16px}.parts li:first-child{border-left:none}.parts li b{color:var(--ink);font-size:var(--t-s);margin-bottom:4px;display:block}.parts li b:before{content:counter(part) " ";font-family:var(--f-mono);color:var(--ink-3);font-weight:400}.roadmap{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;max-width:1180px;display:grid}.roadmap div{border-top:1px solid var(--rule);padding-top:10px}.roadmap h3{font-size:var(--t-s);margin:0 0 4px}.roadmap p{font-size:var(--t-xs);color:var(--ink-2);margin:0}.foot{font-size:var(--t-xs);color:var(--ink-3);max-width:68ch;margin-top:72px}.loading{color:var(--ink-3);font-size:var(--t-xs)}@media (max-width:1080px){.takes,.roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}.parts{grid-template-columns:minmax(0,1fr)}.parts li{border-left:none;border-top:1px solid var(--rule)}.parts li:first-child{border-top:none}}@media (max-width:860px){.shell{grid-template-columns:minmax(0,1fr)}.menu-btn{display:inline-flex}.side{inset:calc(env(safe-area-inset-top,0px) + 53px) 0 0 0;z-index:15;background:var(--paper);border-right:none;height:auto;display:none;position:fixed}.side.open{display:block}main{padding:24px 16px 80px}.hero h1{font-size:38px}.books{grid-template-columns:minmax(0,1fr);gap:28px}.track-list li{grid-template-columns:2.2em minmax(0,1fr)}.track-list .ls,.track-list .bk{grid-column:2}.brand small{display:none}}@media (max-width:560px){.mem{grid-template-columns:minmax(0,1fr);gap:16px}.takes,.roadmap{grid-template-columns:minmax(0,1fr)}.prose h1{font-size:32px}}@media (prefers-reduced-motion:no-preference){.cell{transition:background-color .15s ease-out}}</style>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#course" aria-label="Vizu course, home">
+      <svg viewBox="0 0 34 18" aria-hidden="true"><rect x="1" y="1" width="12" height="16" rx="2" fill="none" stroke="var(--pointer)" stroke-width="2"/><circle cx="7" cy="9" r="2.4" fill="var(--pointer)"/><path d="M13 9h6" stroke="var(--pointer)" stroke-width="2"/><path d="M18 5.5 21.5 9 18 12.5" fill="none" stroke="var(--pointer)" stroke-width="2"/><rect x="21" y="1" width="12" height="16" rx="2" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>
+      vizu <small>course</small>
+    </a>
+    <div class="grow"></div>
+    <nav class="site" id="site-nav" aria-label="Vizu" hidden>
+      <a href="../">Home</a>
+      <a href="../tool/">Tool</a>
+    </nav>
+    <nav class="tracks" aria-label="Track">
+      <a href="#c-1-1" id="track-c">C</a>
+      <a href="#cpp-1-1" id="track-cpp">C++</a>
+      <a href="#asm-1-1" id="track-asm">ASM</a>
+    </nav>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="side">Lessons</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side" id="side" aria-label="Lessons"></aside>
+  <main id="main"><p class="loading">Loading the course…</p></main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/14.1.3/marked.min.js"></script>
+<script src="vizu-engine.js"></script>
+<script>
+(() => {
+  'use strict'
+
+  const FILES = {
+    c: ['01-first-programs', '02-types-and-expressions', '03-control-flow', '04-arrays', '05-functions', '06-pointers',
+        '07-pointers-and-arrays', '08-strings', '09-structures', '10-dynamic-memory', '11-advanced', '12-bits-and-bytes',
+        '13-io-and-library', '14-program-design'],
+    cpp: ['01-from-c', '02-classes', '03-owning-memory', '04-library', '05-polymorphism', '06-templates', '07-errors-and-capstone'],
+    asm: ['01-cpu', '02-x86-64', '03-arm64', '04-riscv', '05-three-machines'],
+  }
+  const TRACK_NAME = { c: 'C', cpp: 'C++', asm: 'Assembly' }
+  const BOOKS = {
+    c: ['King 2–3 · K&R 1.1–1.4', 'King 4, 7 · K&R 2', 'King 5–6 · K&R 3', 'King 8 · K&R 1.6, 5.7', 'King 9–10, 15 · K&R 4', 'King 11 · K&R 5.1–5.2',
+        'King 12 · K&R 5.3–5.9', 'King 13 · K&R 5.5–5.10', 'King 16 · K&R 6', 'King 17 · K&R 5.4, 6.5, 8.7', 'King 14, 18 · K&R 4.11, 5.11–5.12',
+        'King 20 · K&R 2.9', 'King 21–24 · K&R 7', 'King 19 · K&R 6.5–6.6'],
+    cpp: Array(7).fill('Stroustrup, A Tour of C++'),
+    asm: ['CS:APP 4 · P&H 4', 'CS:APP 3 · Jorgensen', 'Arm A64 ISA guide · Pyeatt', 'P&H 2 · RISC-V ISA manual', 'CS:APP 3 · P&H 2'],
+  }
+
+  /* The pointer program from lesson 6.2: the live picture on the home page. */
+  const HERO_CODE = `#include <stdio.h>
+
+int main(void) {
+    int i;
+    int *p;
+    p = &i;
+    i = 1;
+    printf("%d %d\\n", i, *p);
+    *p = 2;
+    printf("%d %d\\n", i, *p);
+    return 0;
+}
+`
+
+  const course = { c: [], cpp: [], asm: [] }   // modules: { track, n, title, intro, lessons: [{ id, num, title, body }] }
+  const byId = new Map()
+  let loaded = false
+  const $ = (sel, root = document) => root.querySelector(sel)
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag)
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v === undefined || v === null || v === false) continue
+      if (k === 'class') el.className = v
+      else if (k === 'html') el.innerHTML = v
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v)
+      else el.setAttribute(k, v === true ? '' : v)
+    }
+    for (const kid of kids.flat()) if (kid !== null && kid !== undefined && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)))
+    return el
+  }
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  const store = {
+    get(k) { try { return localStorage.getItem(k) } catch { return null } },
+    set(k, v) { try { localStorage.setItem(k, v) } catch { /* not kept */ } },
+  }
+
+  /* ---------------- code highlighting: weight and grey, no hues ---------------- */
+  const KW = new Set(('auto break case char const continue default do double else enum extern float for goto if inline int long register restrict return short signed sizeof static struct switch typedef union unsigned void volatile while bool true false ' +
+    'class public private protected template typename virtual override final noexcept new delete namespace using nullptr this operator explicit constexpr consteval concept requires try catch throw friend mutable decltype static_assert').split(' '))
+  function highlight(src) {
+    let out = ''
+    const re = /(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(^[ \t]*#[^\n]*)|([A-Za-z_]\w*)|(\d[\w.]*)/gm
+    let last = 0, m
+    while ((m = re.exec(src))) {
+      out += esc(src.slice(last, m.index))
+      if (m[1]) out += `<span class="c">${esc(m[1])}</span>`
+      else if (m[2]) out += `<span class="s">${esc(m[2])}</span>`
+      else if (m[3]) out += `<span class="pp">${esc(m[3])}</span>`
+      else if (m[4]) out += KW.has(m[4]) ? `<span class="k">${m[4]}</span>` : esc(m[4])
+      else out += esc(m[5])
+      last = re.lastIndex
+    }
+    return out + esc(src.slice(last))
+  }
+
+  /* ---------------- course loading ---------------- */
+  function parseModule(track, md) {
+    md = md.replace(/\r\n?/g, '\n')
+    const head = md.match(/^# Module (\d+) · (.+)$/m)
+    const n = head ? +head[1] : 0
+    const title = head ? head[2].trim() : 'Module'
+    const parts = md.split(/^## /m)
+    const intro = parts[0].replace(/^# .*$/m, '').trim()
+    const lessons = parts.slice(1).map((p) => {
+      const nl = p.indexOf('\n')
+      const line = p.slice(0, nl).trim()
+      const mm = line.match(/^(\d+\.\d+)\s+(.*)$/)
+      const num = mm ? mm[1] : line
+      return { id: `${track}-${num.replace('.', '-')}`, num, title: mm ? mm[2] : line, body: p.slice(nl + 1).trim() }
+    })
+    return { track, n, title, intro, lessons }
+  }
+
+  async function loadCourse() {
+    const jobs = []
+    for (const t of Object.keys(FILES)) FILES[t].forEach((f, i) => jobs.push(fetch(`${t}/${f}.md`).then((r) => {
+      if (!r.ok) throw new Error(`${f}: ${r.status}`)
+      return r.text()
+    }).then((md) => { course[t][i] = parseModule(t, md) })))
+    await Promise.all(jobs)
+    for (const t of Object.keys(course)) for (const m of course[t]) for (const l of m.lessons) byId.set(l.id, { lesson: l, module: m })
+    loaded = true
+  }
+
+  /* ---------------- markdown with labs ---------------- */
+  function renderMarkdown(md) {
+    const labs = []
+    const text = md.replace(/^```(c run[^\n]*|asm run[^\n]*|memory[^\n]*)\n([\s\S]*?)^```[ \t]*$/gm, (_, meta, code) => {
+      labs.push({ kind: meta.startsWith('memory') ? 'memory' : meta.startsWith('asm') ? 'asm' : 'c', meta, code })
+      return `\n<div class="lab-slot" data-lab="${labs.length - 1}"></div>\n`
+    })
+    const md2 = text.replace(/^(\*\*Read:\*\*[^\n]*)\n(?=\*\*You will:\*\*)/gm, '$1  \n')
+    const div = h('div', { class: 'prose' })
+    div.innerHTML = window.marked ? marked.parse(md2, { gfm: true }) : `<pre>${esc(text)}</pre>`
+    div.querySelectorAll('pre > code').forEach((code) => {
+      const pre = code.parentElement
+      pre.className = 'code'
+      const lang = (code.className.match(/language-(\w+)/) || [])[1]
+      if (lang === 'c' || lang === 'cpp') code.innerHTML = highlight(code.textContent)
+      else if (lang === 'asm' || lang === 'x86' || lang === 'arm' || lang === 'riscv') code.innerHTML = highlightAsm(code.textContent, lang)
+    })
+    div.querySelectorAll('table').forEach((t) => { const w = h('div', { class: 'table-wrap' }); t.replaceWith(w); w.append(t) })
+    div.querySelectorAll('.lab-slot').forEach((slot) => {
+      const lab = labs[+slot.dataset.lab]
+      slot.replaceWith(lab.kind === 'c' ? cLab(lab.code, lab.meta) : lab.kind === 'asm' ? asmLab(lab.code, lab.meta) : memoryLab(lab.code))
+    })
+    return div
+  }
+
+  /* ---------------- memory picture: a scene of regions, values and arrows ---------------- */
+  // node: {k:'leaf', text, uninit, addr, size, type, key, changed}
+  //       {k:'ptr', target (addr) | targetKey, pointee, dangling, ref, fn, label, nul, addrText, addr, key, changed}
+  //       {k:'arr', items, more, addr, size, type, key}
+  //       {k:'struct', fields:[{name,node}], addr, size, type, key}
+  function renderScene(scene) {
+    const reg = []        // boxes: {el, addr, size, type, key, depth, leaf}
+    const ptrs = []       // {el, node}
+    const touched = scene.touched || []
+    const hit = (addr, size) => {
+      let r = null
+      for (const t of touched) if (addr < t.addr + t.size && t.addr < addr + size) { if (t.write) return 'write'; r = 'read' }
+      return r
+    }
+    function node(n, depth, path) {
+      if (n.k === 'arr') {
+        const box = h('div', { class: 'arr' })
+        n.items.forEach((it, i) => {
+          const cb = h('span', { class: 'cellbox' }, it.at !== undefined ? h('span', { class: 'caddr' }, hexAddr(it.at)) : null, node(it, depth + 1), h('span', { class: 'idx' }, i))
+          box.append(cb)
+        })
+        if (n.ghost) {
+          box.append(h('span', { class: 'cellbox' }, h('span', { class: 'cell ghost', title: 'past the end' }, '?'), h('span', { class: 'idx bad' }, n.ghost)))
+        }
+        if (n.more) box.append(h('span', { class: 'more' }, `+${n.more} more`))
+        reg.push({ el: box, addr: n.addr, size: n.size, type: n.type, key: n.key, depth, first: box.querySelector('.cell') })
+        return box
+      }
+      if (n.k === 'struct') {
+        const box = h('div', { class: 'struct' })
+        if (n.type) box.append(h('span', { class: 'sh' }, n.type))
+        for (const f of n.fields) box.append(h('div', { class: 'field' }, h('span', {}, f.name), h('div', { class: 'vv' }, node(f.node, depth + 1))))
+        reg.push({ el: box, addr: n.addr, size: n.size, type: n.type, key: n.key, depth })
+        return box
+      }
+      if (n.k === 'ptr') {
+        let cls = 'cell ptr', content
+        if (n.fn) { cls += ' fn'; content = `${n.fn}()` }
+        else if (n.nul) { cls += ' null'; content = n.nul }
+        else if (n.uninit) { cls += ' uninit'; content = '?' }
+        else { content = h('span', { class: 'dot' }); if (n.dangling) cls += ' dangling' }
+        const t = n.changed ? 'changed' : n.addr !== undefined ? hit(n.addr, 8) : null
+        if (t) cls += ' ' + t
+        const el = h('span', { class: cls, title: n.addrText ? `holds ${n.addrText}` : null }, content)
+        reg.push({ el, addr: n.addr, size: 8, type: n.type, key: n.key, depth, leaf: true })
+        if (!n.fn && !n.nul && !n.uninit) ptrs.push({ el, node: n })
+        return el
+      }
+      let cls = 'cell'
+      if (n.uninit) cls += ' uninit'
+      else if (n.text === '\\0' || n.text === "'\\0'") cls += ' zero'
+      const t = n.changed ? 'changed' : n.addr !== undefined ? hit(n.addr, n.size || 1) : null
+      if (t) cls += ' ' + t
+      const el = h('span', { class: cls }, n.uninit ? '?' : n.text)
+      reg.push({ el, addr: n.addr, size: n.size, type: n.type, key: n.key, depth, leaf: true })
+      return el
+    }
+    function varRow(v) {
+      const name = h('div', { class: 'vn' }, h('b', {}, v.name), v.type ? h('span', { title: v.type }, v.type) : null,
+        v.at !== undefined ? h('span', { class: 'addr', title: 'its address' }, hexAddr(v.at)) : null)
+      const val = h('div', { class: 'vv' }, node(v.node, 1))
+      return h('div', { class: 'var' }, name, val)
+    }
+    function region(r) {
+      const el = h('div', { class: 'region' + (r.running ? ' running' : '') + (r.freed ? ' freed' : '') })
+      if (r.title || r.sub || r.freed) el.append(h('div', { class: 'region-h' }, r.title ? h('b', {}, r.title) : null, r.sub ? h('span', {}, r.sub) : null, r.freed ? h('span', { class: 'freed-tag' }, 'freed') : null))
+      if (r.node) el.append(h('div', { class: 'vv' }, node(r.node, 1)))
+      else if (!r.vars || !r.vars.length) el.append(h('span', { class: 'empty' }, 'no variables'))
+      for (const v of r.vars || []) el.append(varRow(v))
+      if (r.ret !== undefined) el.append(h('div', { class: 'ret' }, 'returns ', h('span', { class: 'cell changed' }, r.ret)))
+      if (r.oob) el.append(h('div', { class: 'oob' }, r.oob))
+      return el
+    }
+
+    const mem = h('div', { class: 'mem' })
+    const left = h('div', { class: 'mem-col' }), right = h('div', { class: 'mem-col' })
+    if (scene.stack.length) {
+      left.append(h('h4', {}, 'Stack ', h('span', {}, '(newest on top)')))
+      for (const f of scene.stack) left.append(region(f))
+    } else left.append(h('h4', {}, 'Stack'), h('div', { class: 'region' }, h('span', { class: 'empty' }, 'no frames: the program has not started or has ended')))
+    if (scene.heap.length) {
+      right.append(h('h4', {}, 'Heap'))
+      for (const b of scene.heap) right.append(region(b))
+    }
+    for (const a of scene.areas) {
+      right.append(h('h4', {}, a.title))
+      right.append(region({ vars: a.vars }))
+    }
+    if (scene.globals.length) {
+      right.append(h('h4', {}, 'Globals and statics'))
+      right.append(region({ vars: scene.globals }))
+    }
+    if (!scene.heap.length && !scene.areas.length && !scene.globals.length) {
+      // nothing beside the stack: it gets the whole width, and the heap one line under it
+      mem.classList.add('one')
+      left.append(h('h4', {}, 'Heap ', h('span', {}, "(nothing malloc'ed yet)")))
+      mem.append(left)
+    } else mem.append(left, right)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    svg.setAttribute('class', 'arrows')
+    svg.setAttribute('aria-hidden', 'true')
+    mem.append(svg)
+    mem._reg = reg
+    mem._ptrs = ptrs
+    return mem
+  }
+
+  /** An address as the reader sees it: 0x1000, 0x7ffc (the interpreter keeps them short and round). */
+  const shownAddr = (addr) => (window.VizuEngine && window.VizuEngine.shown ? window.VizuEngine.shown(addr) : addr)
+  const hexAddr = (at) => '0x' + at.toString(16)
+
+  const BASIC = /^(?:(?:unsigned|signed|const|long|short)\s+)*(?:char|short|int|long|float|double|_Bool|bool|size_t)$/
+  function resolve(reg, n) {
+    if (n.targetKey !== undefined) {
+      const key = n.targetKey
+      let r = reg.find((x) => x.key === key)
+      if (!r && key.includes('.')) r = reg.find((x) => x.key && key.startsWith(x.key + '.'))
+      if (r && r.first && !r.leaf) return { el: r.first }
+      return r || null
+    }
+    if (n.target === null || n.target === undefined) return null
+    const t = n.target
+    const cands = reg.filter((x) => x.addr === t)
+    if (!cands.length) {
+      const inside = reg.filter((x) => x.addr !== undefined && x.addr <= t && t < x.addr + (x.size || 1)).sort((a, b) => b.depth - a.depth)
+      return inside[0] || null
+    }
+    const pointee = (n.pointee || '').trim()
+    const exact = cands.find((x) => x.type === pointee)
+    if (exact) return exact.first && !exact.leaf && !BASIC.test(pointee) ? exact : exact
+    const basic = BASIC.test(pointee) || pointee.endsWith('*')
+    cands.sort((a, b) => (basic ? b.depth - a.depth : a.depth - b.depth))
+    return cands[0]
+  }
+
+  function drawArrows(mem) {
+    const svg = mem.querySelector('svg.arrows')
+    if (!svg || !mem.isConnected) return
+    const base = mem.getBoundingClientRect()
+    if (!base.width) return
+    svg.setAttribute('width', mem.scrollWidth)
+    svg.setAttribute('height', mem.scrollHeight)
+    svg.innerHTML = ''
+    const NS = 'http://www.w3.org/2000/svg'
+    for (const p of mem._ptrs) {
+      const s = p.el.getBoundingClientRect()
+      const sx0 = s.left - base.left, sx1 = s.right - base.left, sy = s.top + s.height / 2 - base.top
+      const target = resolve(mem._reg, p.node)
+      const cls = p.node.dangling ? 'dangling' : p.node.ref ? 'ref' : ''
+      let d, hx, hy, dir
+      if (!target) {
+        // what it pointed to is gone: a short red stub with a cross
+        d = `M${sx1} ${sy} h28`
+        const path = document.createElementNS(NS, 'path')
+        path.setAttribute('d', d); path.setAttribute('class', 'dangling')
+        const x = document.createElementNS(NS, 'path')
+        x.setAttribute('d', `M${sx1 + 30} ${sy - 5} l10 10 M${sx1 + 40} ${sy - 5} l-10 10`); x.setAttribute('class', 'dangling')
+        svg.append(path, x)
+        continue
+      }
+      const t = target.el.getBoundingClientRect()
+      const tx0 = t.left - base.left, tx1 = t.right - base.left, ty = t.top + t.height / 2 - base.top
+      if (tx0 >= sx1 + 14) {
+        const k = Math.max(24, (tx0 - sx1) / 2)
+        d = `M${sx1} ${sy} C${sx1 + k} ${sy} ${tx0 - k} ${ty} ${tx0 - 7} ${ty}`; hx = tx0; hy = ty; dir = 1
+      } else if (tx1 <= sx0 - 14) {
+        const k = Math.max(24, (sx0 - tx1) / 2)
+        d = `M${sx0} ${sy} C${sx0 - k} ${sy} ${tx1 + k} ${ty} ${tx1 + 7} ${ty}`; hx = tx1; hy = ty; dir = -1
+      } else {
+        const ex = Math.max(sx1, tx1)
+        const k = 26 + Math.min(60, Math.abs(ty - sy) * 0.2)
+        d = `M${sx1} ${sy} C${ex + k} ${sy} ${ex + k} ${ty} ${tx1 + 7} ${ty}`; hx = tx1; hy = ty; dir = -1
+      }
+      const path = document.createElementNS(NS, 'path')
+      path.setAttribute('d', d)
+      if (cls) path.setAttribute('class', cls)
+      const head = document.createElementNS(NS, 'path')
+      head.setAttribute('d', dir === 1 ? `M${hx} ${hy} l-8 -4.5 v9 z` : `M${hx} ${hy} l8 -4.5 v9 z`)
+      head.setAttribute('class', 'head' + (p.node.dangling ? ' dangling' : ''))
+      svg.append(path, head)
+    }
+  }
+  const watched = new Set()
+  const ro = 'ResizeObserver' in window ? new ResizeObserver((entries) => { for (const e of entries) drawArrows(e.target) }) : null
+  function mountMem(container, mem) {
+    const old = container.querySelector('.mem')
+    if (old) { ro && ro.unobserve(old); watched.delete(old) }
+    container.replaceChildren(mem)
+    watched.add(mem)
+    if (ro) ro.observe(mem)
+    requestAnimationFrame(() => drawArrows(mem))
+  }
+  window.addEventListener('resize', () => { for (const m of watched) if (m.isConnected) drawArrows(m); else watched.delete(m) })
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { for (const m of watched) drawArrows(m) })
+
+  /* ---------------- engine steps → scenes ---------------- */
+  function fromView(v, literals) {
+    const n = fromView1(v, literals)
+    if (v.addr !== undefined) n.at = shownAddr(v.addr)
+    return n
+  }
+  function fromView1(v, literals) {
+    switch (v.k) {
+      case 'scalar': return { k: 'leaf', text: v.text, uninit: !v.init, addr: v.addr, size: v.size, type: v.type }
+      case 'char': return { k: 'leaf', text: !v.init ? '?' : v.text === '\\0' ? '\\0' : `'${v.text}'`, uninit: !v.init, addr: v.addr, size: 1, type: 'char' }
+      case 'ptr': {
+        const n = { k: 'ptr', addr: v.addr, type: v.type, addrText: v.text, target: v.target, dangling: v.dangling, uninit: !v.init, pointee: v.type.replace(/\s*\*\s*$/, '') }
+        if (v.init && v.target === null) {
+          if (v.text === 'NULL' || v.text === '0x0' || v.text === '(nil)') n.nul = 'NULL'
+          else if (!/^0x/i.test(v.text)) n.fn = v.text
+          else n.nul = v.text
+        }
+        if (v.label && literals && v.target !== null) {
+          const lit = literals.get(v.label)
+          if (lit) lit.seen = true
+        }
+        return n
+      }
+      case 'array': return { k: 'arr', addr: v.addr, size: v.size, type: v.items.length ? `${v.elem}[${v.items.length + (v.more || 0)}]` : v.elem, items: v.items.map((x) => fromView(x, literals)), more: v.more }
+      case 'struct': return { k: 'struct', addr: v.addr, size: v.size, type: `struct ${v.name}`, fields: v.fields.map((f) => ({ name: f.name, node: fromView(f.value, literals) })) }
+    }
+    return { k: 'leaf', text: '?' }
+  }
+  function literalTable(run) {
+    // a string literal's first address: the lowest a pointer into it ever held
+    const lits = new Map()
+    const visit = (v) => {
+      if (!v) return
+      if (v.k === 'ptr' && v.label && v.target !== null) {
+        const l = lits.get(v.label)
+        if (!l || v.target < l.base) lits.set(v.label, { label: v.label, base: v.target })
+      } else if (v.k === 'array') v.items.forEach(visit)
+      else if (v.k === 'struct') v.fields.forEach((f) => visit(f.value))
+    }
+    for (const s of run.steps) {
+      for (const f of s.frames) f.vars.forEach((x) => visit(x.value))
+      s.globals.forEach((x) => visit(x.value))
+      s.heap.forEach((b) => visit(b.value))
+    }
+    return lits
+  }
+  function sceneFromStep(step, run, lits) {
+    const used = new Map()
+    for (const [k, l] of lits) used.set(k, { ...l, seen: false })
+    const frames = step.frames.slice().reverse().map((f, i) => ({
+      title: `${f.func}()`, sub: `line ${f.line}`, running: i === 0, ret: f.ret,
+      vars: f.vars.map((v) => ({ name: v.name, type: v.type, addr: v.addr, at: shownAddr(v.addr), node: fromView(v.value, used) })),
+    }))
+    const heap = step.heap.map((b) => ({
+      title: `malloc #${b.id}`, sub: `${b.type || 'block'} · ${b.size} bytes at ${hexAddr(shownAddr(b.addr))} · line ${b.line}`, freed: b.freed, vars: [],
+      node: fromView(b.value, used),
+    }))
+    const globals = step.globals.map((v) => ({ name: v.name, type: v.type, addr: v.addr, at: shownAddr(v.addr), node: fromView(v.value, used) }))
+    const areas = []
+    const litVars = []
+    for (const l of used.values()) {
+      if (!l.seen) continue
+      let text
+      try { text = JSON.parse(l.label) } catch { text = l.label.replace(/^"|"$/g, '') }
+      const items = [...text].map((ch, i) => ({ k: 'leaf', text: `'${ch}'`, addr: l.base + i, at: shownAddr(l.base + i), size: 1, type: 'char' }))
+      items.push({ k: 'leaf', text: '\\0', addr: l.base + text.length, at: shownAddr(l.base + text.length), size: 1, type: 'char' })
+      litVars.push({ name: l.label, addr: l.base, at: shownAddr(l.base), node: { k: 'arr', items, addr: l.base, size: text.length + 1, type: `char[${text.length + 1}]` } })
+    }
+    if (litVars.length) areas.push({ title: 'String literals (read-only)', vars: litVars, sub: '' , titleIn: true })
+    // a read past the end of an array: draw the cell that is not there
+    if (step.kind === 'error' && step.message) {
+      const m = step.message.match(/^(\w+)\[(-?\d+)\] is outside (\w+): index (-?\d+), but it has (\d+) elements?/)
+      if (m && frames.length) {
+        for (const f of frames) {
+          const v = f.vars.find((x) => x.name === m[3])
+          if (v && v.node.k === 'arr' && +m[4] >= +m[5]) { v.node.ghost = m[4]; f.oob = `${m[3]}[${m[4]}] is past the end`; break }
+        }
+      }
+    }
+    return { stack: frames, heap, globals, areas: areas.map((a) => ({ title: a.title, vars: a.vars, region: true })), touched: step.touched || [] }
+  }
+
+  /* ---------------- memory blocks (C++ pictures) → scenes ---------------- */
+  function splitTop(s) {
+    const out = []
+    let depth = 0, q = null, cur = ''
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i]
+      if (q) { cur += c; if (c === '\\') { cur += s[++i] || ''; continue } if (c === q) q = null; continue }
+      if (c === '"' || c === "'") { q = c; cur += c; continue }
+      if (c === '[' || c === '{') depth++
+      if (c === ']' || c === '}') depth--
+      if (c === ',' && depth === 0) { out.push(cur.trim()); cur = ''; continue }
+      cur += c
+    }
+    if (cur.trim()) out.push(cur.trim())
+    return out
+  }
+  function parseValue(raw, key) {
+    let s = raw.trim(), changed = false
+    if (/\s!$/.test(s) || s === '!') { changed = true; s = s.replace(/\s*!$/, '').trim() }
+    if (s.startsWith('[') && s.endsWith(']')) {
+      const items = splitTop(s.slice(1, -1)).map((x, i) => parseValue(x, `${key}[${i}]`))
+      return { k: 'arr', items, key }
+    }
+    if (s.startsWith('{') && s.endsWith('}')) {
+      const fields = splitTop(s.slice(1, -1)).map((f) => {
+        const i = f.indexOf(':')
+        const name = f.slice(0, i).trim()
+        return { name, node: parseValue(f.slice(i + 1), `${key}.${name}`) }
+      })
+      return { k: 'struct', fields, key }
+    }
+    if (s.startsWith('"') && s.endsWith('"')) {
+      const text = JSON.parse(s)
+      const items = [...text].map((ch, i) => ({ k: 'leaf', text: `'${ch}'`, key: `${key}[${i}]` }))
+      items.push({ k: 'leaf', text: '\\0', key: `${key}[${text.length}]` })
+      return { k: 'arr', items, key, changed }
+    }
+    if (s.startsWith('->')) return { k: 'ptr', targetKey: s.slice(2).trim(), key, changed }
+    if (s.startsWith('ref ')) return { k: 'ptr', targetKey: s.slice(4).trim(), ref: true, key, changed }
+    if (s === 'null' || s === 'nullptr') return { k: 'ptr', nul: 'null', key, changed }
+    if (s === '?') return { k: 'leaf', uninit: true, key, changed }
+    return { k: 'leaf', text: s, key, changed }
+  }
+  /* Made-up addresses for a memory block, by the interpreter's rule: literals and
+     tables from 0x1000, globals from 0x2000, heap block #n at 0x4000 + (n - 1) * 0x100,
+     the stack downwards from 0x8000, oldest frame first. Sizes come from the types. */
+  const SIZE_OF = { char: 1, bool: 1, short: 2, int: 4, float: 4, unsigned: 4, long: 8, double: 8, size_t: 8 }
+  function typeSize(type) {
+    if (!type) return null
+    const t = type.replace(/\bconst\b/g, '').trim()
+    if (/[*&]$/.test(t)) return 8
+    const a = t.match(/^(.*)\[(\d+)\]$/)
+    if (a) { const e = typeSize(a[1].trim()); return e ? e * +a[2] : null }
+    if (SIZE_OF[t] !== undefined) return SIZE_OF[t]
+    if (/^(std::)?string$/.test(t)) return 32
+    if (/vector</.test(t)) return 24
+    if (/unique_ptr</.test(t)) return 8
+    if (/shared_ptr</.test(t)) return 16
+    return null
+  }
+  const elemType = (type) => { const m = type && type.match(/^(.*)\[\d+\]$/); return m ? m[1].trim() : undefined }
+  function nodeSize(n, type) {
+    if (n.k === 'arr') return Math.max(1, n.items.length) * (n.items.length ? nodeSize(n.items[0], elemType(type)) : 1)
+    const ts = typeSize(type)
+    if (ts) return ts
+    if (n.k === 'struct') return n.fields.reduce((sum, f) => sum + nodeSize(f.node), 0) || 8
+    if (n.k === 'ptr') return 8
+    const x = n.text || ''
+    if (/^'/.test(x) || x === '\\0') return 1
+    if (/^-?\d+\.\d/.test(x)) return 8
+    if (/^[A-Za-z_][\w:~]*$/.test(x)) return 8
+    return 4
+  }
+  function place(n, at, type) {
+    n.at = at
+    if (n.k === 'arr') {
+      const es = n.items.length ? nodeSize(n.items[0], elemType(type)) : 1
+      n.items.forEach((it, i) => place(it, at + i * es, elemType(type)))
+    } else if (n.k === 'struct') {
+      let o = at
+      for (const fl of n.fields) { place(fl.node, o); o += nodeSize(fl.node) }
+    }
+  }
+  const alignOf = (size) => (size >= 8 ? 8 : size >= 4 ? 4 : size >= 2 ? 2 : 1)
+  function placeAll(s) {
+    let top = 0x8000
+    for (const fr of s.stack) for (const v of fr.vars) {      // oldest frame first
+      const size = nodeSize(v.node, v.type)
+      top -= size
+      top -= top % alignOf(size)
+      v.at = top
+      place(v.node, top, v.type)
+    }
+    const up = (list, start) => {
+      let at = start
+      for (const v of list) {
+        const size = nodeSize(v.node, v.type)
+        at += (alignOf(size) - (at % alignOf(size))) % alignOf(size)
+        v.at = at
+        place(v.node, at, v.type)
+        at += size
+      }
+    }
+    up(s.globals, 0x2000)
+    let lit = 0x1000
+    for (const a of s.areas) { up(a.vars, lit); lit += 0x100 }
+    for (const b of s.heap) {
+      const n = parseInt(String(b.title).replace(/\D/g, ''), 10) || 1
+      const at = 0x4000 + (n - 1) * 0x100
+      place(b.node, at, b.sub)
+      b.sub = `${b.sub} at ${hexAddr(at)}`
+    }
+  }
+
+  function parseMemory(text) {
+    const steps = []
+    let step = null, cur = null
+    const ensure = () => { if (!step) { step = { caption: '', stack: [], heap: [], globals: [], areas: [] }; steps.push(step) } }
+    for (const line of text.replace(/\r\n?/g, '\n').split('\n')) {
+      if (!line.trim()) continue
+      const t = line.trim()
+      if (t.startsWith('step:')) { step = { caption: t.slice(5).trim(), stack: [], heap: [], globals: [], areas: [] }; steps.push(step); cur = null; continue }
+      ensure()
+      if (!/^\s/.test(line)) {
+        let m
+        if ((m = t.match(/^frame\s+(.+)$/))) { cur = { title: m[1], vars: [] }; step.stack.push(cur); continue }
+        if (t === 'globals') { cur = { vars: step.globals, isGlobals: true }; continue }
+        if ((m = t.match(/^area\s+(.+)$/))) { cur = { title: m[1], vars: [] }; step.areas.push(cur); continue }
+        if ((m = t.match(/^heap\s+(#\w+):\s*(.*?)(\s*\(freed\))?\s*=\s*(.*)$/))) {
+          step.heap.push({ title: m[1], sub: m[2].trim(), freed: !!m[3], vars: [], node: parseValue(m[4], m[1]) })
+          cur = null
+          continue
+        }
+        continue
+      }
+      // a variable: name: type = value
+      const i = t.indexOf(': ')
+      const eq = t.indexOf(' = ', i)
+      if (i < 0 || eq < 0 || !cur) continue
+      const name = t.slice(0, i).trim(), type = t.slice(i + 2, eq).trim()
+      cur.vars.push({ name, type, node: parseValue(t.slice(eq + 3), name) })
+    }
+    for (const s of steps) placeAll(s)
+    for (const s of steps) {
+      s.stack = s.stack.slice().reverse()
+      if (s.stack.length) s.stack[0].running = true
+      s.areas = s.areas.map((a) => ({ title: a.title, vars: a.vars }))
+    }
+    return steps
+  }
+
+  /* ---------------- a lab: code, picture, explanation, output, controls ---------------- */
+  const ICON = {
+    first: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3v10M13 3 6 8l7 5z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg>',
+    back: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11 3 4 8l7 5z" fill="currentColor"/></svg>',
+    fwd: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l7 5-7 5z" fill="currentColor"/></svg>',
+    last: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 3v10M3 3l7 5-7 5z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/></svg>',
+    play: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11L13 8z" fill="currentColor"/></svg>',
+    pause: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>',
+  }
+  let labCount = 0
+  // more(): whether the step shown still has stages to go through (the computer strip)
+  function controls(total, onGo, more = () => false) {
+    const id = `lab-${++labCount}`
+    const range = h('input', { type: 'range', min: 0, max: Math.max(0, total - 1), value: 0, id: `${id}-step`, 'aria-label': 'Step' })
+    const count = h('span', { class: 'count', 'aria-live': 'polite' })
+    const btn = (name, label, fn, extra = '') => h('button', { type: 'button', class: extra, 'aria-label': label, title: label, html: ICON[name], onclick: fn })
+    let timer = null
+    const play = btn('play', 'Play', () => toggle(), 'primary')
+    const ctl = h('div', { class: 'ctl' },
+      btn('first', 'First step', () => { stop(); onGo('first') }),
+      btn('back', 'Step back (←)', () => { stop(); onGo(-1) }),
+      play,
+      btn('fwd', 'Step forward (→)', () => { stop(); onGo(+1) }),
+      btn('last', 'Last step', () => { stop(); onGo('last') }),
+      range, count)
+    range.addEventListener('input', () => { stop(); onGo(+range.value, true) })
+    function stop() { if (timer) { clearInterval(timer); timer = null; play.innerHTML = ICON.play; play.setAttribute('aria-label', 'Play'); play.title = 'Play' } }
+    function toggle() {
+      if (timer) return stop()
+      if (+range.value >= total - 1 && !more()) onGo('first')
+      play.innerHTML = ICON.pause; play.setAttribute('aria-label', 'Pause'); play.title = 'Pause'
+      timer = setInterval(() => { if (+range.value >= total - 1 && !more()) stop(); else onGo(+1) }, 650)
+    }
+    if (total <= 1) ctl.querySelectorAll('button, input').forEach((x) => (x.disabled = true))
+    return { el: ctl, set(i) { range.value = i; count.textContent = `step ${i + 1} / ${total}`; ctl.querySelectorAll('button')[0].disabled = i <= 0; ctl.querySelectorAll('button')[1].disabled = i <= 0; ctl.querySelectorAll('button')[3].disabled = i >= total - 1 && !more(); ctl.querySelectorAll('button')[4].disabled = i >= total - 1 }, toggle, stop }
+  }
+  function keyNav(el, go, ctl) {
+    el.addEventListener('keydown', (e) => {
+      if (e.target.matches('input, a, summary, textarea')) return
+      if (e.key === 'ArrowRight') { e.preventDefault(); ctl.stop(); go(+1) }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); ctl.stop(); go(-1) }
+      else if (e.key === 'Home') { e.preventDefault(); ctl.stop(); go('first') }
+      else if (e.key === 'End') { e.preventDefault(); ctl.stop(); go('last') }
+      else if (e.key === ' ' && e.target === el) { e.preventDefault(); ctl.toggle() }
+    })
+  }
+  function parseMeta(meta) {
+    const get = (k) => { const m = meta.match(new RegExp(`${k}="([^"]*)"`)); return m ? m[1] : undefined }
+    return { input: get('input'), start: get('start') }
+  }
+
+  function questionHTML(d) {
+    const parts = window.VizuEngine.question(d)
+    return parts.map((p) => (typeof p === 'string' ? esc(p) : `<code>${esc(p.code)}</code>`)).join('')
+  }
+  function captionHTML(step, prev) {
+    const top = step.frames[step.frames.length - 1]
+    let html = ''
+    switch (step.kind) {
+      case 'line':
+        html = `Line ${step.line} runs next.` + (prev && prev.kind === 'line' && prev.line !== step.line ? ` <span class="why">Line ${prev.line} ran.</span>` : '')
+        break
+      case 'call': html = `<code>${esc(top ? top.func : 'a function')}()</code> is called: a new frame goes on the stack.`; break
+      case 'return': html = top && top.ret !== undefined ? `<code>${esc(top.func)}()</code> returns <span class="verdict">${esc(top.ret)}</span>.` : `<code>${esc(top ? top.func : 'the function')}()</code> returns.`; break
+      case 'decide': {
+        const d = step.decision
+        const kind = window.VizuEngine.KIND[d.what]
+        const round = d.round && d.what !== 'if' ? `, check ${d.round}` : ''
+        html = `${esc(kind[0].toUpperCase() + kind.slice(1))} on line ${step.line}${round}: ${questionHTML(d)}` +
+          (d.what === 'switch' ? '' : ` <span class="verdict">${d.result ? 'Yes.' : 'No.'}</span>`) +
+          `<span class="why"><code>${esc(d.shown)}</code> · ${esc(d.outcome)}</span>`
+        break
+      }
+      case 'done': html = esc(step.message || 'The program has ended.'); break
+      case 'error': html = `<span class="tag">Stopped at line ${step.line}.</span> ${esc(step.message || '')}`; break
+      case 'input': html = 'Waiting for input.'; break
+      default: html = `Line ${step.line}.`
+    }
+    if (step.warning) html += `<span class="warn"><b>Warning.</b> ${esc(step.warning.replace(/^Line \d+: /, ''))}</span>`
+    return html
+  }
+
+  let toolURL = null
+  async function shareHash(code, stdin) {
+    const bytes = new TextEncoder().encode(JSON.stringify(stdin ? [code, stdin] : [code]))
+    const packed = new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer())
+    let bin = ''
+    for (let i = 0; i < packed.length; i += 0x8000) bin += String.fromCharCode(...packed.subarray(i, i + 0x8000))
+    return 'c=' + btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+  function openInTool(code, stdin) {
+    const a = h('a', { class: 'open-tool', target: '_blank', rel: 'noopener', title: 'Open this program in the tool, where you can change it' }, 'Open in the tool')
+    if ('CompressionStream' in window) shareHash(code, stdin).then((hash) => { a.href = `../tool/#${hash}` })
+    return a
+  }
+
+  function cLab(code, meta) {
+    const { input, start } = parseMeta(meta)
+    const stdin = input ? input.split('\\n').join('\n') : ''
+    const src = code.replace(/\s+$/, '') + '\n'
+    let run
+    try { run = window.VizuEngine.runC(src, { stdin, stdinClosed: true }) } catch (e) { run = { steps: [], compileError: { message: String(e && e.message || e), line: 1 } } }
+    const lab = h('section', { class: 'lab', tabindex: 0, 'aria-label': 'Program to step through' })
+    const lines = src.split('\n').slice(0, -1)
+    const codeScroll = h('div', { class: 'code-scroll' })
+    const lineEls = lines.map((l, i) => {
+      const el = h('div', { class: 'ln' }, h('span', { class: 'no' }, i + 1), h('span', { html: highlight(l) || ' ' }))
+      codeScroll.append(el)
+      return el
+    })
+    const codeCol = h('div', { class: 'lab-code' }, codeScroll)
+    if (run.compileError) {
+      lab.append(h('div', { class: 'lab-body' }, codeCol, h('div', { class: 'caption err' }, h('span', { class: 'tag' }, 'This program could not be read.'), ` Line ${run.compileError.line}: ${run.compileError.message}`)))
+      return lab
+    }
+    const caption = h('div', { class: 'caption', 'aria-live': 'polite' })
+    const flowHost = h('div', { class: 'flow-wrap' })
+    const memHost = h('div', { class: 'mem-wrap' })
+    // the old engine (no flow, no computer) still shows the output
+    const E = window.VizuEngine
+    const sysHost = E.drawSystem ? h('div', { class: 'sys-wrap' }) : h('div', { class: 'out' }, h('h5', {}, 'Output'), h('pre', {}))
+    lab.append(h('div', { class: 'lab-body' }, codeCol, caption, flowHost, memHost), sysHost)
+    const lits = literalTable(run)
+    let steps = run.steps
+    let i = 0
+    // stdout to the terminal or to a file (./prog > out.txt): the strip switches it, and the program runs again
+    const rerun = (to) => {
+      run = E.runC(src, { stdin, stdinClosed: true, stdout: to })
+      steps = run.steps
+      lab._steps = steps
+      i = Math.min(i, steps.length - 1)
+      show('last')
+    }
+    const ctl = controls(steps.length, go, () => !!E.stagesLeft && E.stagesLeft(sysHost) > 0)
+    ctl.el.append(openInTool(src, stdin))
+    lab.append(ctl.el)
+    function show(at) {
+      const step = steps[i], prev = steps[i - 1]
+      lineEls.forEach((el) => el.classList.remove('cur', 'bad'))
+      const ln = lineEls[step.line - 1]
+      if (ln) {
+        ln.classList.add(step.kind === 'error' ? 'bad' : 'cur')
+        const top = ln.offsetTop - codeScroll.clientHeight / 2 + ln.offsetHeight
+        if (ln.offsetTop < codeScroll.scrollTop + 8 || ln.offsetTop + ln.offsetHeight > codeScroll.scrollTop + codeScroll.clientHeight - 8) codeScroll.scrollTop = Math.max(0, top)
+      }
+      caption.className = 'caption' + (step.kind === 'error' ? ' err' : '')
+      caption.innerHTML = captionHTML(step, prev)
+      if (E.drawFlow) E.drawFlow(flowHost, steps, i, src)
+      if (E.drawRam) E.drawRam(memHost, steps, i)
+      else mountMem(memHost, renderScene(sceneFromStep(step, run, lits)))
+      if (E.drawSystem) E.drawSystem(sysHost, steps, i, stdin, { at, onStdout: rerun, code: src, onStep: (n) => { i = n; show('last') } })
+      else {
+        const out = sysHost.querySelector('pre')
+        const before = prev ? prev.stdout : ''
+        const now = step.stdout
+        if (!now) out.innerHTML = '<span class="nothing">nothing printed yet</span>'
+        else if (now.startsWith(before) && now.length > before.length) out.innerHTML = esc(before) + `<mark>${esc(now.slice(before.length))}</mark>`
+        else out.textContent = now
+        out.scrollTop = out.scrollHeight
+      }
+      ctl.set(i)
+    }
+    function go(to, absolute) {
+      // a step of the program first goes through the strip's stages
+      if (!absolute && (to === 1 || to === -1) && E.stepStage && E.stepStage(sysHost, to)) return ctl.set(i)
+      const from = i
+      if (to === 'first') i = 0
+      else if (to === 'last') i = steps.length - 1
+      else if (absolute) i = to
+      else i = Math.min(steps.length - 1, Math.max(0, i + to))
+      if (i === from && to !== 'first' && to !== 'last') return ctl.set(i)
+      show(to === 1 && !absolute ? undefined : 'last')
+    }
+    keyNav(lab, go, ctl)
+    if (start === 'last') i = steps.length - 1
+    else if (start && /^line:(\d+)$/.test(start)) { const L = +start.slice(5); const k = steps.findIndex((s) => s.line === L); if (k >= 0) i = k }
+    else if (start) i = Math.min(steps.length - 1, Math.max(0, +start || 0))
+    lab._start = (n) => { i = n; show('last') }
+    lab._steps = steps
+    show()
+    return lab
+  }
+
+  /** Assembly, lightly: labels and mnemonics bold, directives and comments grey. */
+  function highlightAsm(src, arch) {
+    const comment = arch === 'x86' ? ';' : arch === 'riscv' ? '#' : '//'
+    return src.split('\n').map((line) => {
+      let at = -1, q = ''
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i]
+        if (q) { if (ch === q) q = ''; continue }
+        if (ch === '"' || ch === '`') { q = ch; continue }
+        if (line.startsWith(comment, i) || (arch !== 'x86' && line.startsWith('//', i))) { at = i; break }
+      }
+      const body = at < 0 ? line : line.slice(0, at)
+      const rest = at < 0 ? '' : `<span class="c">${esc(line.slice(at))}</span>`
+      const m = body.match(/^(\s*)([A-Za-z_.$][\w.$]*:)?(\s*)(\S+)?(.*)$/)
+      if (!m) return esc(body) + rest
+      const [, sp1, label, sp2, word, tail] = m
+      const w = word ? (/^\./.test(word) || /^(section|global|db|dw|dd|dq|equ|resb|resq|times)$/i.test(word) ? `<span class="pp">${esc(word)}</span>` : `<span class="k">${esc(word)}</span>`) : ''
+      return esc(sp1) + (label ? `<b>${esc(label)}</b>` : '') + esc(sp2) + w + esc(tail || '') + rest
+    }).join('\n')
+  }
+
+  const ARCH_NAME = { x86: 'x86-64 · NASM syntax', arm: 'ARM64 · GNU as syntax', riscv: 'RISC-V (RV64) · GNU as syntax' }
+
+  function asmLab(code, meta) {
+    const get = (k) => { const m = meta.match(new RegExp(`${k}="([^"]*)"`)); return m ? m[1] : undefined }
+    const arch = get('arch') || 'riscv'
+    const input = get('input')
+    const stdin = input ? input.split('\\n').join('\n') : ''
+    const src = code.replace(/\s+$/, '') + '\n'
+    const E = window.VizuEngine
+    const lab = h('section', { class: 'lab asm', tabindex: 0, 'aria-label': 'Assembly program to step through' })
+    const lines = src.split('\n').slice(0, -1)
+    const codeScroll = h('div', { class: 'code-scroll' })
+    const lineEls = lines.map((l, i) => {
+      const el = h('div', { class: 'ln' }, h('span', { class: 'no' }, i + 1), h('span', { html: highlightAsm(l, arch) || ' ' }))
+      codeScroll.append(el)
+      return el
+    })
+    const codeCol = h('div', { class: 'lab-code' }, h('div', { class: 'lab-arch' }, ARCH_NAME[arch] || arch), codeScroll)
+    if (stdin) codeCol.append(h('div', { class: 'lab-input' }, 'Typed at the keyboard: ', h('code', {}, stdin.replace(/\n/g, '\\n'))))
+    if (!E.runAsm) {
+      lab.append(h('div', { class: 'lab-body' }, codeCol, h('div', { class: 'caption err' }, 'This page needs the newer Vizu engine to run assembly.')))
+      return lab
+    }
+    const run = E.runAsm(src, { arch, stdin })
+    if (run.error || !run.steps.length) {
+      const e = run.error || { line: 1, message: 'Nothing to run.' }
+      if (lineEls[e.line - 1]) lineEls[e.line - 1].classList.add('bad')
+      lab.append(h('div', { class: 'lab-body' }, codeCol, h('div', { class: 'caption err' }, h('span', { class: 'tag' }, `Line ${e.line} could not be assembled.`), ` ${e.message}`)))
+      return lab
+    }
+    const caption = h('div', { class: 'caption', 'aria-live': 'polite' })
+    const cpuHost = h('div', { class: 'flow-wrap cpu-wrap' })
+    const memHost = h('div', { class: 'mem-wrap' })
+    const stripHost = h('div', { class: 'sys-wrap' })
+    lab.append(h('div', { class: 'lab-body' }, codeCol, caption, cpuHost, memHost), stripHost)
+    const steps = run.steps
+    let i = 0
+    const ctl = controls(steps.length, go, () => E.cpuStagesLeft(stripHost) > 0)
+    lab.append(ctl.el)
+    function captionFor(step) {
+      const ins = step.instr >= 0 ? run.prog.instrs[step.instr] : null
+      let html = ins ? `Line ${step.line}: <code>${esc(ins.text)}</code>${ins.pseudo ? ` <span class="why">You wrote <code>${esc(ins.pseudo)}</code>, a pseudo-instruction: the CPU runs <code>${esc(ins.text)}</code>.</span>` : ''}` : ''
+      if (step.exit !== undefined) html += `<span class="why">The program ended: exit status <b>${step.exit}</b>.</span>`
+      if (step.error) html = `<span class="tag">Stopped at line ${step.line}.</span> ${esc(step.error)}`
+      return html
+    }
+    function show(at) {
+      const step = steps[i]
+      lineEls.forEach((el) => el.classList.remove('cur', 'bad'))
+      const ln = lineEls[step.line - 1]
+      if (ln) {
+        ln.classList.add(step.error ? 'bad' : 'cur')
+        const top = ln.offsetTop - codeScroll.clientHeight / 2 + ln.offsetHeight
+        if (ln.offsetTop < codeScroll.scrollTop + 8 || ln.offsetTop + ln.offsetHeight > codeScroll.scrollTop + codeScroll.clientHeight - 8) codeScroll.scrollTop = Math.max(0, top)
+      }
+      caption.className = 'caption' + (step.error ? ' err' : '')
+      caption.innerHTML = captionFor(step)
+      E.drawCpu({ cpu: cpuHost, mem: memHost, strip: stripHost }, run, i, { at })
+      ctl.set(i)
+    }
+    function go(to, absolute) {
+      if (!absolute && (to === 1 || to === -1) && E.cpuStage(stripHost, to)) return ctl.set(i)
+      const from = i
+      if (to === 'first') i = 0
+      else if (to === 'last') i = steps.length - 1
+      else if (absolute) i = to
+      else i = Math.min(steps.length - 1, Math.max(0, i + to))
+      if (i === from && to !== 'first' && to !== 'last') return ctl.set(i)
+      show(to === 1 && !absolute ? undefined : 'last')
+    }
+    keyNav(lab, go, ctl)
+    lab._start = (n) => { i = n; show('last') }
+    lab._steps = steps
+    lab._run = run
+    show()
+    return lab
+  }
+
+  function memoryLab(text) {
+    const steps = parseMemory(text)
+    const lab = h('section', { class: 'lab memonly', tabindex: 0, 'aria-label': 'Memory picture' })
+    const caption = h('div', { class: 'caption', 'aria-live': 'polite' })
+    const memHost = h('div', { class: 'mem-wrap' })
+    lab.append(h('div', { class: 'lab-body' }, h('div', { class: 'lab-right' }, caption, memHost)))
+    let i = 0
+    const ctl = controls(steps.length, go)
+    if (steps.length > 1) lab.append(ctl.el)
+    function show() {
+      const s = steps[i]
+      caption.innerHTML = s.caption ? esc(s.caption) : '<span class="why">A picture of memory, drawn the way Vizu draws C.</span>'
+      if (!s.caption) caption.style.minHeight = 'auto'
+      mountMem(memHost, renderScene({ stack: s.stack, heap: s.heap, globals: s.globals, areas: s.areas, touched: [] }))
+      ctl.set(i)
+    }
+    function go(to, absolute) {
+      if (to === 'first') i = 0
+      else if (to === 'last') i = steps.length - 1
+      else if (absolute) i = to
+      else i = Math.min(steps.length - 1, Math.max(0, i + to))
+      show()
+    }
+    keyNav(lab, go, ctl)
+    show()
+    return lab
+  }
+
+  /* ---------------- pages ---------------- */
+  function sideNav(current) {
+    const side = $('#side')
+    side.replaceChildren()
+    const curTrack = current && current.module ? current.module.track : 'c'
+    side.append(h('a', { class: 'home-link', href: '#course', 'aria-current': current ? null : 'page' }, 'The course'))
+    for (const t of ['c', 'cpp', 'asm']) {
+      side.append(h('h2', {}, `${TRACK_NAME[t]} track`))
+      const list = h('ol', {})
+      for (const m of course[t]) {
+        if (!m) continue
+        const isOpen = current && current.module === m
+        const li = h('li', { class: 'mod' + (isOpen ? ' open' : '') })
+        const sub = h('ol', {})
+        for (const l of m.lessons) sub.append(h('li', {}, h('a', { href: `#${l.id}`, 'aria-current': current && current.lesson === l ? 'page' : null, html: `${esc(l.num)} ${marked.parseInline(l.title)}` })))
+        li.append(h('button', { type: 'button', 'aria-expanded': isOpen ? 'true' : 'false', onclick: (e) => { li.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', li.classList.contains('open')) } },
+          h('span', { class: 'n' }, m.n), h('span', {}, m.title)), sub)
+        list.append(li)
+      }
+      side.append(list)
+      if (t !== 'asm') side.append(h('div', { style: 'height:16px' }))
+    }
+    for (const t of ['c', 'cpp', 'asm']) $(`#track-${t}`).setAttribute('aria-current', current && curTrack === t ? 'true' : 'false')
+  }
+
+  function lessonPage(entry) {
+    const { lesson, module } = entry
+    const main = $('#main')
+    main.replaceChildren()
+    const idx = module.lessons.indexOf(lesson)
+    const all = course[module.track].flatMap((m) => m.lessons)
+    const at = all.indexOf(lesson)
+    const prev = all[at - 1], next = all[at + 1]
+    const head = h('div', { class: 'prose' },
+      h('p', { class: 'eyebrow' }, `${TRACK_NAME[module.track]} track · Module ${module.n} · ${module.title}`),
+      h('h1', { html: `${esc(lesson.num)} ${marked.parseInline(lesson.title)}` }))
+    main.append(head)
+    if (idx === 0 && module.intro) {
+      const intro = renderMarkdown(module.intro)
+      intro.style.color = 'var(--ink-2)'
+      intro.style.marginTop = '12px'
+      main.append(intro)
+    }
+    const body = renderMarkdown(lesson.body)
+    body.style.marginTop = '20px'
+    main.append(body)
+    const pager = h('nav', { class: 'pager', 'aria-label': 'Lessons' })
+    if (prev) pager.append(h('a', { href: `#${prev.id}`, class: 'prev', html: `<span>Previous</span>${esc(prev.num)} ${marked.parseInline(prev.title)}` }))
+    if (next) pager.append(h('a', { href: `#${next.id}`, class: 'next', html: `<span>Next</span>${esc(next.num)} ${marked.parseInline(next.title)}` }))
+    main.append(pager)
+    document.title = `${lesson.num} ${lesson.title.replace(/`/g, '')} · Vizu Course`
+  }
+
+  function homePage() {
+    const main = $('#main')
+    main.replaceChildren()
+    document.title = 'Vizu Course'
+    const total = (t) => course[t].reduce((s, m) => s + (m ? m.lessons.length : 0), 0)
+    const nC = loaded ? total('c') : 64, nCpp = loaded ? total('cpp') : 27, nAsm = loaded ? total('asm') : 28
+    main.append(h('section', { class: 'hero' },
+      h('p', { class: 'eyebrow' }, 'Vizu course · C, C++, then assembly and the CPU'),
+      h('h1', {}, 'Learn C by watching memory change.'),
+      h('p', {}, `${nC} lessons of C and ${nCpp} of C++, built from K&R and King, then ${nAsm} of assembly on three real machines. Every C program in them runs right here, one line at a time: the stack, the heap, every array cell and every pointer. Every assembly program runs one instruction at a time, through the stages of a CPU.`),
+      h('div', { class: 'actions' }, h('a', { class: 'btn solid', href: '#c-1-1' }, 'Start with lesson 1.1'), h('a', { class: 'btn', href: '#c-6-1' }, 'Go to pointers'), h('a', { class: 'btn', href: '#cpp-1-1' }, 'The C++ track'), h('a', { class: 'btn', href: '#asm-1-1' }, 'Assembly and the CPU'))))
+    const hero = cLab(HERO_CODE, '')
+    const k = (hero._steps || []).findIndex((s) => s.line === 10)
+    if (k >= 0) hero._start(k)
+    main.append(hero)
+    main.append(h('p', { class: 'hero-note' }, 'Lesson 6.2. The write on line 9 goes along the arrow from p and changes i. Step back and forward with the buttons or the arrow keys.'))
+
+    const books = h('section', { class: 'section' },
+      h('h2', {}, 'Built from two books'),
+      h('p', { class: 'lede' }, 'The C track follows a close reading of the two books every C course leans on: how each one orders the language, explains it, and picks its examples.'),
+      h('div', { class: 'books' },
+        h('div', {}, h('h3', {}, 'The C Programming Language', h('span', {}, 'Kernighan and Ritchie, 2nd edition, 1988')),
+          h('dl', {},
+            h('dt', {}, 'Shape'), h('dd', {}, 'A tutorial chapter that runs through the whole language, then each part in depth.'),
+            h('dt', {}, 'Pointers'), h('dd', {}, 'Chapter 5, after functions; arrays and pointers together.'),
+            h('dt', {}, 'Examples'), h('dd', {}, 'Small real tools: a temperature table, word count, longest line, four versions of strcpy, a storage allocator.'),
+            h('dt', {}, 'Vizu takes'), h('dd', {}, 'Get to a real program fast; evolve one piece of code; end with how the machine does it.'))),
+        h('div', {}, h('h3', {}, 'C Programming: A Modern Approach', h('span', {}, 'K. N. King, 2nd edition, 2008')),
+          h('dl', {},
+            h('dt', {}, 'Shape'), h('dd', {}, 'A spiral: each topic met briefly, then revisited with more detail.'),
+            h('dt', {}, 'Pointers'), h('dd', {}, 'Chapter 11, after arrays and functions, over three chapters.'),
+            h('dt', {}, 'Pictures'), h('dd', {}, 'Boxes and arrows redrawn by hand after each statement, to show the data changing.'),
+            h('dt', {}, 'Vizu takes'), h('dd', {}, 'The spiral, a warning for every trap, and those snapshots, drawn here for every line.')))),
+      h('div', { class: 'takes' },
+        h('div', {}, h('h3', {}, 'Memory first'), h('p', {}, 'Lesson 1.2 already shows a variable as a box with an address. By module 6, a pointer names something seen dozens of times.')),
+        h('div', {}, h('h3', {}, 'Bug labs'), h('p', {}, 'Each module has a program with a real bug: past the end, a dead local, a use after free. Vizu stops on it and says why.')),
+        h('div', {}, h('h3', {}, 'Predict, then run'), h('p', {}, 'Before stepping, write down the output or where the arrow will point. Then watch.'))))
+    main.append(books)
+
+    for (const t of ['c', 'cpp', 'asm']) {
+      const sec = h('section', { class: 'section', id: `track-list-${t}` },
+        h('h2', {}, { c: 'The C track', cpp: 'The C++ track', asm: 'The assembly track' }[t]),
+        h('p', { class: 'lede' }, {
+          c: 'Fourteen modules, from hello, world to a word-frequency counter built on a tree. Every lesson has a program you can step through.',
+          cpp: 'For learners who finished the C track. Each feature is drawn as what it becomes in memory: references, this, destructors, moves, smart pointers, vtables.',
+          asm: 'How a CPU runs a program, then three instruction sets: x86-64 (PCs and servers), ARM64 (phones, Apple silicon) and RISC-V (open, for teaching and chips). Every program is assembled into real machine code and runs one stage at a time: fetch, decode, execute, memory, write back.',
+        }[t]))
+      const list = h('ol', { class: 'track-list' })
+      if (!loaded) list.append(h('li', {}, h('span', { class: 'loading' }, 'Loading…')))
+      course[t].forEach((m, i) => {
+        if (!m) return
+        list.append(h('li', {},
+          h('span', { class: 'n' }, m.n),
+          h('a', { class: 't', href: `#${m.lessons[0].id}` }, m.title),
+          h('span', { class: 'ls', html: m.lessons.map((l) => marked.parseInline(l.title)).join(' · ') }),
+          h('span', { class: 'bk' }, BOOKS[t][i])))
+      })
+      sec.append(list)
+      main.append(sec)
+    }
+
+    main.append(h('section', { class: 'section' },
+      h('h2', {}, 'A lesson, in five parts'),
+      h('p', { class: 'lede' }, 'One idea per lesson, about a screen and a half long, always in the same order.'),
+      h('ol', { class: 'parts' },
+        h('li', {}, h('b', {}, 'The idea'), 'A few paragraphs, with the sections of K&R and King to read.'),
+        h('li', {}, h('b', {}, 'A program'), 'A whole program that runs here, with its input given.'),
+        h('li', {}, h('b', {}, 'Watch'), 'Which steps to stop at, and what to look at in the picture.'),
+        h('li', {}, h('b', {}, 'Check yourself'), 'Predict an output, a value, an arrow. Answers are folded.'),
+        h('li', {}, h('b', {}, 'Common mistake'), 'The trap, and what it looks like when it happens.'))))
+
+    main.append(h('section', { class: 'section' },
+      h('h2', {}, 'Lower still'),
+      h('p', { class: 'lede' }, 'The same pictures, one level lower each time. Assembly and the CPU are here now; the rest comes next.'),
+      h('div', { class: 'roadmap' },
+        h('div', {}, h('h3', {}, h('a', { href: '#asm-1-1' }, 'The CPU')), h('p', {}, 'Fetch, decode, execute, memory, write back, one stage at a time; then pipelines, prediction and caches.')),
+        h('div', {}, h('h3', {}, h('a', { href: '#asm-2-1' }, 'Assembly')), h('p', {}, 'x86-64, ARM64 and RISC-V: registers, flags, the stack, calls and system calls, in real machine code.')),
+        h('div', {}, h('h3', {}, 'Memory hardware'), h('p', {}, 'Caches and cache lines, alignment, virtual memory and pages, why a vector beats a list.')),
+        h('div', {}, h('h3', {}, 'The operating system'), h('p', {}, 'Processes, system calls, read and write, and how malloc gets memory from the kernel.')))))
+
+    main.append(h('p', { class: 'foot' }, 'Programs run in your browser on Vizu\'s own C interpreter, with gcc\'s sizes for 64-bit Linux. Unions and files are not run yet; those lessons show code to read. C++ pictures are drawn from descriptions in each lesson until a C++ front end exists.'))
+  }
+
+  function route() {
+    const id = location.hash.replace(/^#/, '')
+    const entry = loaded ? byId.get(id) : null
+    $('#side').classList.remove('open')
+    $('#menu-btn').setAttribute('aria-expanded', 'false')
+    if (loaded) sideNav(entry || null)
+    if (entry) { lessonPage(entry); store.set('vizu.course.last', id) }
+    else homePage()
+    window.scrollTo(0, 0)
+  }
+
+  $('#menu-btn').addEventListener('click', () => {
+    const side = $('#side')
+    const open = !side.classList.contains('open')
+    side.classList.toggle('open', open)
+    $('#menu-btn').setAttribute('aria-expanded', open ? 'true' : 'false')
+  })
+  window.addEventListener('hashchange', route)
+
+  fetch('../tool/', { method: 'HEAD' }).then((r) => {
+    if (!r.ok) return
+    toolURL = '../tool/'
+    document.body.classList.add('with-tool')
+    $('#site-nav').hidden = false
+  }).catch(() => {})
+
+  homePage()
+  loadCourse().then(route).catch((e) => {
+    const main = $('#main')
+    main.prepend(h('p', { class: 'lab-error' }, `The lessons could not be loaded (${e.message}). The live example below still runs.`))
+  })
+})()
+</script>
