@@ -1,21 +1,47 @@
 # Module 10 · Dynamic memory
 
-Read alongside: King chapter 17 (17.1–17.6) · K&R sections 5.4, 6.5 and 8.7
+Every variable we have used so far has had its size fixed when the program
+was written. An array of 100 `int`s holds 100, no more and no less, and if
+the input turns out to have 101 numbers, the program is stuck. The lifetimes
+have been fixed too. A local variable lives as long as its function's
+frame, and disappears when the function returns; a global lives for the
+whole run. There has been nothing in between.
 
-Stack boxes live as long as their frame. When a program needs memory whose
-size is known only while it runs, or that must outlive the function that made
-it, it asks for it on the *heap*, and gives it back itself. Vizu draws the heap
-next to the stack: every block, who points to it, and what happened to it.
+Real programs constantly need memory that does not fit those rules. A text
+editor does not know how long the file will be until it opens it. A program
+that reads a list of names does not know how many there will be. A function
+that builds a new string must hand it to its caller, so the string has to
+outlive the function's frame.
+
+For all of these, C lets a program ask for memory while it runs, in exactly
+the amount it needs, from a separate region called the *heap*. Memory from
+the heap stays until the program itself gives it back, whatever functions
+come and go in the meantime. That freedom comes with a responsibility that
+C does not take off your hands: everything taken from the heap must be
+given back exactly once, and never used afterwards. This module shows how
+to use the heap, the classic mistakes, and finally how the heap works
+inside.
+
+Vizu draws the heap next to the stack. Every block appears there when it is
+made, labelled with the line that made it, with arrows from every pointer
+that leads to it, and it fades when it is freed.
 
 ## 10.1 The heap: `malloc` and `free`
 
-**Read:** King 17.1 · K&R 5.4
-**You will:** allocate a block, use it, and give it back.
+The library function `malloc`, declared in `<stdlib.h>`, reserves a block
+of memory on the heap. It is given the number of bytes wanted, and it
+returns the address of the first byte. If there is not enough memory, it
+returns `NULL` instead.
 
-`malloc(n)` reserves `n` bytes on the heap and returns their address as a
-`void *`, a pointer to no particular type, which converts to any object
-pointer. It returns `NULL` when there is no memory. `free(p)` gives the block
-back. Between the two, the block is yours; nothing frees it for you.
+What type is that address? `malloc` does not know what the memory will be
+used for, so it returns a `void *`, a "pointer to anything". A `void *`
+cannot be used to reach the memory directly, but it can be assigned to a
+pointer of any other type, which then decides how the bytes are used.
+
+When the block is no longer needed, the program gives it back with
+`free`, passing the same address that `malloc` returned. Between the two
+calls, the block belongs to the program, and nothing will free it
+automatically.
 
 ```c run
 #include <stdio.h>
@@ -37,46 +63,127 @@ int main(void) {
 }
 ```
 
-`n * sizeof *a` asks for `n` of whatever `a` points to; if `a`'s type
-changes, the line stays right.
+Look at how the size is written: `n * sizeof *a`. `*a` is what `a` points
+to, an `int`, so this asks for room for `n` `int`s, 20 bytes. Written this
+way, the line stays correct even if the type of `a` is changed later.
 
-**Watch:**
+Once `a` points to the block, it is used exactly like an array: `a[i]` is
+`*(a + i)`, as lesson 7.2 explained, and that works for any pointer.
 
-- Line 6: a block of 20 bytes appears on the heap, its cells `?`; `a`'s arrow
-  leads to it. It is labelled with the line that made it.
-- Line 14: the block fades: freed. `a` still holds the old address until line
-  15 sets it to `NULL`.
+Step through it and watch the right-hand side of the memory picture. At
+line 6, a block of 20 bytes appears in the heap, labelled with the line
+that made it. Its boxes hold question marks, because `malloc` does not
+clear the memory it hands out. An arrow leads to it from `a`, which lives on
+the stack in `main`'s frame. The loop fills the boxes. At line 14, `free`
+gives the block back, and it fades. `a` still holds the old address, which
+now leads to memory that is no longer the program's, until line 15 sets it
+to `NULL`.
 
 ### Check yourself
 
-1. Where are `n` and `a` themselves, and where is what `a` points to?
+1. Where are `n` and `a`, and where are the five `int`s?
    <details><summary>Answer</summary>
 
-   `n` and `a` are on the stack, in `main`'s frame. The five `int`s are on
-   the heap.
+   `n` and `a` are ordinary local variables, on the stack in `main`'s
+   frame. The five `int`s are on the heap. `a` only holds their address.
    </details>
 
 2. Why set `a` to `NULL` after `free`?
    <details><summary>Answer</summary>
 
-   So that a later mistaken use fails clearly (a null pointer) instead of
-   quietly using freed memory.
+   So that a later mistaken use of `a` fails clearly, as the use of a null
+   pointer, instead of quietly reaching memory that has been given back.
    </details>
 
-### Common mistake
+### A common mistake
 
-`malloc(n)` when `n` elements were meant: it allocates `n` *bytes*, a quarter
-of what five `int`s need.
+Writing `malloc(n)` when `n` elements were meant. `malloc` counts bytes,
+so this reserves `n` bytes, a quarter of what `n` `int`s need, and the loop
+then writes past the end of the block.
 
-## 10.2 Growing arrays: `calloc`, `realloc`
+## 10.2 Strings on the heap
 
-**Read:** King 17.3
-**You will:** keep an array that grows as data arrives.
+The heap is the natural home for strings whose length is known only while
+the program runs. Here is a function that joins two strings into a new
+one. It cannot use a local array for the result, because the array would
+die with the function's frame (lesson 6.5), and it cannot know in advance
+how long the result will be. So it measures, asks the heap for exactly the
+right amount, and returns a pointer to it.
 
-`calloc(n, size)` allocates `n` elements and fills them with zeros.
-`realloc(p, newsize)` resizes a block: it may grow it where it is, or move it,
-copying the contents and freeing the old block. Either way, use the address it
-returns. Doubling the size each time it is full keeps copying rare.
+```c run
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char *concat(const char *s1, const char *s2);
+
+int main(void) {
+    char *full = concat("Grace ", "Hopper");
+    if (full == NULL)
+        return 1;
+    printf("%s (%zu characters)\n", full, strlen(full));
+    free(full);
+    return 0;
+}
+
+char *concat(const char *s1, const char *s2) {
+    char *result = malloc(strlen(s1) + strlen(s2) + 1);
+    if (result == NULL)
+        return NULL;
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+```
+
+The size asked for is the length of both strings plus one, for the `'\0'`
+at the end. Forgetting that one byte is the most common mistake with
+strings on the heap.
+
+Step through it and follow the block. It is made inside `concat`, and
+`result`'s arrow leads to it from `concat`'s frame. `strcpy` and `strcat`
+fill it, character by character. Then `concat` returns, and its frame
+disappears, but the block stays: the heap does not care about frames. The
+arrow now comes from `full`, in `main`'s frame. The caller has received a
+string that outlived the function that made it, and from now on it is the
+caller's job to free it, as line 12 does.
+
+### Check yourself
+
+1. How many bytes does `concat("Grace ", "Hopper")` ask for?
+   <details><summary>Answer</summary>
+
+   13: six characters, six characters, and one for the `'\0'`.
+   </details>
+
+2. Who must free the string, and how would they know?
+   <details><summary>Answer</summary>
+
+   The caller, `main`. C has no way to say this in the code, so it has to
+   be written in the function's documentation: "returns a new string,
+   which the caller must free".
+   </details>
+
+### A common mistake
+
+Asking for `strlen(s)` bytes to copy a string `s`. The copy needs one
+byte more for its `'\0'`, and `strcpy` writes that byte one past the end of
+the block.
+
+## 10.3 Growing arrays: `calloc` and `realloc`
+
+Two more functions complete the set. `calloc(n, size)` reserves room for
+`n` elements of `size` bytes each, like `malloc(n * size)`, but it also
+fills the whole block with zeros. `realloc(p, new_size)` changes the size of
+a block that came from the heap. If there is room after the block, it may
+simply grow it where it is. If not, it reserves a new block of the new
+size elsewhere, copies the old contents into it, frees the old block, and
+returns the new address. Either way, the program must use the address that
+`realloc` returns from then on.
+
+With `realloc`, a program can keep an array that grows as data arrives.
+The usual strategy is to double the capacity whenever the array is full;
+the copying then happens rarely, however many elements arrive.
 
 ```c run input="4 8 15 16 23 42\n"
 #include <stdio.h>
@@ -105,42 +212,55 @@ int main(void) {
 }
 ```
 
-**Watch:** at each `realloc`, a bigger block appears with the old values
-copied in, the old block fades, and `a`'s arrow swings to the new one. This is
-exactly what C++'s `std::vector` does inside (C++ lesson 4.2).
+`n` counts the numbers stored and `cap` the room there is. Before storing
+a number, the program checks whether the array is full, and if so, doubles
+it.
+
+This is a lab worth watching closely. At each `realloc`, a new, larger block
+appears in the heap with the old values already copied into it, the old
+block fades, and `a`'s arrow swings over to the new one. It happens twice,
+when the capacity goes from 2 to 4 and from 4 to 8. The C++ track will
+show that its `std::vector` does exactly this inside.
 
 ### Check yourself
 
-1. How many times does `realloc` run for six numbers?
+1. How many times does `realloc` run for the six numbers?
    <details><summary>Answer</summary>
 
-   Two: the capacity goes 2 → 4 → 8.
+   Twice: the capacity goes from 2 to 4, then from 4 to 8.
    </details>
 
-2. Why not write `a = realloc(a, ...)` directly?
+2. Why is the result of `realloc` put into `bigger` instead of straight
+   into `a`?
    <details><summary>Answer</summary>
 
-   If `realloc` fails it returns `NULL` and leaves the old block alone.
-   Assigning `NULL` to `a` would lose the only pointer to it: a leak.
+   If `realloc` fails, it returns `NULL` and leaves the old block where it
+   was. `a = realloc(a, …)` would then overwrite the only pointer to the
+   old block with `NULL`, and the block could never be freed.
    </details>
 
-### Common mistake
+### A common mistake
 
-Keeping a pointer into the old block (`int *third = &a[2];`) across a
-`realloc`. If the block moved, `third` points to freed memory.
+Keeping a pointer into the old block across a `realloc`, such as `int
+*third = &a[2];`. If the block has moved, `third` points into memory that
+has been freed.
 
-## 10.3 Leaks, double frees, dangling pointers
+## 10.4 Leaks, double frees and dangling pointers
 
-**Read:** King 17.4
-**You will:** recognize the three classic heap bugs.
+The heap gives a program control over memory, and with control come
+three classic ways to get it wrong. Each has a name, and it is worth
+learning them, because together they cause a large share of the bugs and
+security holes in C programs.
 
-- **Use after free**: a pointer still leads to a block that was freed. The
-  memory may already belong to something else.
-- **Double free**: freeing the same block twice corrupts the allocator.
-- **Leak**: the last pointer to a block is lost before it is freed; the block
-  can never be given back.
+- A **dangling pointer** still holds the address of a block that has been
+  freed. Using it is a *use after free*: the memory may already have been
+  handed out again, for something else.
+- A **double free** gives the same block back twice. It confuses the
+  allocator's records, and the damage shows up later, somewhere else.
+- A **leak** loses the last pointer to a block before the block is freed.
+  The block can then never be given back.
 
-The first is often hidden behind a second name for the same block:
+The first is often hidden behind a second pointer to the same block:
 
 ```c run expect="error"
 #include <stdio.h>
@@ -156,10 +276,13 @@ int main(void) {
 }
 ```
 
-**Watch:** after `free(p)` both arrows turn red: `q` is dangling too, although
-nobody touched it. Vizu stops at line 9.
+Step through it. After `free(p)`, both arrows turn red, `p`'s and `q`'s,
+although nothing was ever done to `q`. A pointer does not know that its
+block has gone; it keeps the old address. Vizu stops at line 9, where the
+freed block is read through `q`.
 
-A leak does not stop anything; the program just never gives memory back:
+A leak, on the other hand, stops nothing. The program simply never gives
+the memory back:
 
 ```c run
 #include <stdlib.h>
@@ -173,41 +296,49 @@ int main(void) {
 }
 ```
 
-**Watch:** each round, `p` gets a new block and the previous one has no arrow
-left. At the end Vizu marks three leaked blocks.
+On each round, `p` receives a new block, and the block from the round
+before is left with no arrow pointing to it at all. Nothing in the
+program can reach it any more, so nothing can free it. When the program
+ends, Vizu marks the three blocks as leaked.
 
 ### Check yourself
 
-1. Is a leak a problem in a program that ends a second later?
+1. Is a leak a problem in a program that finishes a second later?
    <details><summary>Answer</summary>
 
-   Not much: the operating system takes everything back when a process ends.
-   In a server or a game that runs for days, leaks add up until memory runs
-   out.
+   Hardly: when a program ends, the operating system takes back all its
+   memory. But a server, an editor or a game runs for days, and its leaks
+   add up until memory runs out.
    </details>
 
-2. How does setting pointers to `NULL` after `free` help with double frees?
+2. How does setting a pointer to `NULL` after `free` help against double
+   frees?
    <details><summary>Answer</summary>
 
-   `free(NULL)` does nothing, so a second `free` of a nulled pointer is
-   harmless. It does not help with other copies of the pointer, like `q`.
+   `free(NULL)` does nothing, so freeing the same pointer a second time
+   becomes harmless. It does not help with other copies of the pointer,
+   such as `q`.
    </details>
 
-### Common mistake
+### A common mistake
 
-Freeing memory that did not come from `malloc` (a local array, a string
-literal) or freeing a pointer into the middle of a block. Only the exact
-address `malloc` returned may be freed.
+Freeing something that did not come from `malloc`, such as a local array
+or a string literal, or a pointer into the middle of a block. Only the
+exact address that `malloc`, `calloc` or `realloc` returned may be given to
+`free`.
 
-## 10.4 Linked lists
+## 10.5 Linked lists
 
-**Read:** King 17.5 · K&R 6.5 (self-referential structures)
-**You will:** build, walk and free a linked list.
+The heap makes possible a structure that arrays cannot provide: a list
+that grows and shrinks one element at a time, where adding an element at
+the front costs the same whether the list has three elements or three
+million.
 
-A *node* is a struct holding a value and a pointer to the next node. A list is
-a pointer to the first node, and the last node's `next` is `NULL`. Unlike an
-array, a list grows one node at a time, and inserting at the front costs the
-same whatever its length.
+Each element of such a list is a structure called a *node*. It holds a
+value and a pointer to the next node. The last node's pointer is `NULL`,
+which marks the end. The list as a whole is just a pointer to its first
+node. Since each node points to the next, the nodes can lie anywhere on
+the heap; they are linked by their pointers, not by being side by side.
 
 ```c run
 #include <stdio.h>
@@ -241,23 +372,36 @@ int main(void) {
 }
 ```
 
-**Watch:**
+The structure `struct node` contains a pointer to its own type. That is
+allowed, because a pointer has a fixed size whatever it points to; a
+structure could not contain a whole copy of itself.
 
-- Each `push` makes a node on the heap whose `next` arrow leads to the old
-  first node; then `list` swings to the new one.
-- The printing loop's `p` hops from node to node along the arrows.
-- The freeing loop saves `next` *before* freeing: after `free(list)`,
-  `list->next` may not be read.
+`push` puts a new value at the front of the list. It makes a node, stores
+the value, makes the node's `next` point to the old first node, and
+returns the new node, which becomes the new first node.
+
+The three loops in `main` do the three basic things to a list. The first
+builds it. The second walks it: `p` starts at the first node and follows
+the `next` pointers until it reaches `NULL`. The third frees it, node by
+node.
+
+Step through it and watch the heap. Each `push` makes a node whose `next`
+arrow leads to the previous first node, and then `list`'s arrow swings to
+the new node. In the second loop, `p`'s arrow hops from node to node along
+the chain. In the third, notice the order of the work: the pointer to the
+next node is saved *before* the current node is freed, because after
+`free(list)`, the node, and its `next`, may no longer be read.
 
 ### Check yourself
 
 1. In which order are the values printed?
    <details><summary>Answer</summary>
 
-   `30 -> 20 -> 10 -> NULL`: each push goes in front.
+   `30 -> 20 -> 10 -> NULL`. Each `push` puts its value in front of the
+   ones before.
    </details>
 
-2. Write the search: return the first node holding `v`, or `NULL`.
+2. Write a function that returns the first node holding `v`, or `NULL`.
    <details><summary>Answer</summary>
 
    ```c
@@ -267,25 +411,24 @@ int main(void) {
        return p;
    }
    ```
-   The order of the `&&` matters: `p->value` is read only when `p` is not
-   `NULL`.
+   The order of the two tests matters: thanks to `&&`, `p->value` is read
+   only when `p` is not `NULL`.
    </details>
 
-### Common mistake
+### A common mistake
 
-Freeing in the loop header: `for (p = list; p; p = p->next) free(p);` reads
-`p->next` from a node that was just freed.
+Freeing the list in a `for` loop: `for (p = list; p != NULL; p = p->next)
+free(p);`. After the body frees `p`, the loop reads `p->next` from the node
+that was just freed.
 
-## 10.5 Pointers to pointers
+## 10.6 Pointers to pointers
 
-**Read:** King 17.6 · K&R 5.6
-**You will:** let a function change a caller's pointer, and remove a node
-cleanly.
-
-To let a function change an `int`, pass an `int *`. To let it change a
-`struct node *`, such as the head of a list, pass a `struct node **`. The same
-idea gives a short way to remove a node: walk with a pointer to the *link*
-that leads to the current node, so the first node needs no special case.
+The `push` of the last lesson returns the new first node, and the caller
+must remember to write `list = push(list, …)`. It would be nicer if `push`
+could update `list` itself. But `list` is a variable of the caller's, and
+lesson 6.4 taught us how a function changes a caller's variable: it is
+given the variable's address. `list` is a `struct node *`, so its address
+is a `struct node **`, a pointer to a pointer.
 
 ```c run
 #include <stdio.h>
@@ -331,13 +474,26 @@ int main(void) {
 }
 ```
 
-**Watch:** in `remove_value`, `link` is an arrow to an arrow: first to `list`
-in `main`, then to the first node's `next`. At line 20 the arrow it points to
-swings past the dead node.
+In `push`, `head` points to `main`'s `list`, so `*head` *is* `list`: the
+new node's `next` takes its old value, and `*head = n` changes `list`
+itself.
+
+`remove_value` uses the same idea in a clever way. To unlink a node, we
+must change the pointer that leads to it. For the first node, that pointer
+is `list`; for any other node, it is the `next` of the node before. Instead
+of treating the two cases separately, `link` holds the address of
+*whichever pointer leads to the current node*. It starts at `&list`, and
+moves on with `link = &(*link)->next`. When the node is found, `*link =
+dead->next` makes that pointer skip over it, whichever pointer it is.
+
+Step into `remove_value` and watch `link`. It is an arrow to an arrow: at
+first, its arrow leads to `list` in `main`'s frame; after one step, to the
+`next` box inside the first node. At line 21, the pointer at the end of
+`link`'s arrow swings past the node holding 2, and line 22 frees that node.
 
 ### Check yourself
 
-1. What is printed?
+1. What does the program print?
    <details><summary>Answer</summary>
 
    `1 3`.
@@ -346,24 +502,22 @@ swings past the dead node.
 2. What would go wrong if `push` took `struct node *head`?
    <details><summary>Answer</summary>
 
-   It would change its own copy of the head; `main`'s `list` would stay `NULL`
-   (lesson 5.2, one level up).
+   It would change only its own copy of the pointer, and `main`'s `list`
+   would stay `NULL`: the problem of lesson 5.3, one level up.
    </details>
 
-### Common mistake
+### A common mistake
 
-`*link->next` instead of `(*link)->next`. `->` binds tighter than `*`, so it
-means `*(link->next)`, and `link` is not a pointer to a node.
+Writing `*link->next` instead of `(*link)->next`. `->` binds more tightly
+than `*`, so the first means `*(link->next)`, which treats `link` as a
+pointer to a node, which it is not.
 
-## 10.6 Writing a tiny allocator
+## 10.7 How `malloc` works
 
-**Read:** K&R 5.4 (a rudimentary storage allocator), 8.7
-**You will:** see that `malloc` is just C code handing out pieces of a big
-array.
-
-K&R write an allocator twice: a simple one in 5.4 that hands out pieces of a
-big `char` array like a stack, and a real one in 8.7 that keeps a list of free
-blocks. The simple one fits on a screen:
+`malloc` is not magic, and it is not part of the language. It is an
+ordinary C function in the library, and it is instructive to write a small
+one ourselves. The simplest kind hands out pieces of one big array, one
+after the other, like the stack:
 
 ```c run
 #include <stdio.h>
@@ -399,31 +553,56 @@ int main(void) {
 }
 ```
 
-**Watch:** `pool` is one long row of 64 cells in the globals area; `next_free`
-is an arrow that moves right with each `alloc` and jumps back at `afree`.
+`pool` is the memory to hand out, and `next_free` points to the first byte
+not yet handed out. `alloc` checks whether enough bytes are left, moves
+`next_free` on, and returns the old position. `afree` moves `next_free`
+back, which frees the given block and everything handed out after it.
 
-A real `malloc` cannot free things in any order with a single pointer. It puts
-a small *header* before each block (its size, so `free` needs no size), keeps
-freed blocks in a list, and asks the operating system for more memory when
-the list has nothing big enough.
+Step through it and watch `pool`, a long row of 64 boxes among the
+globals, with `next_free`'s arrow moving right at each `alloc` and jumping
+back at `afree`. `c` does not fit, since 30 bytes are taken and only 34
+remain. After `afree(b)`, `d` is placed where `b` was.
+
+### What a real `malloc` adds
+
+This allocator can only free in the reverse order of allocating. A real
+`malloc` must allow blocks to be freed in any order, and it manages that
+with a few more ideas:
+
+- In front of each block it keeps a small *header* holding the block's
+  size. That is how `free` knows how much to give back, although it is
+  given only an address.
+- Freed blocks go into a *free list*. The next `malloc` looks there first
+  for a block big enough, and neighbouring free blocks are joined into one.
+- When nothing on the free list is big enough, `malloc` asks the operating
+  system for more memory. On Linux it does so with the system calls `brk`,
+  which extends the heap's region, or `mmap`, which maps a fresh area for a
+  very large block. Those are slow, so `malloc` asks for a large piece at
+  once and then hands it out bit by bit.
+
+This is also why a leak is invisible from inside the program: the memory
+is still marked as in use in the allocator's records, and only the
+program could have said otherwise.
 
 ### Check yourself
 
 1. Why does `c` not fit?
    <details><summary>Answer</summary>
 
-   10 + 20 = 30 bytes are taken, 34 are left, and `c` wants 40.
+   10 + 20 = 30 bytes are handed out, so 34 are left, and `c` wants 40.
    </details>
 
-2. What is wrong with calling `afree(a)` while `b` is still in use?
+2. What goes wrong if the program calls `afree(a)` while `b` is still in
+   use?
    <details><summary>Answer</summary>
 
-   `next_free` jumps back to `a`, so the next `alloc` hands out `b`'s bytes
-   again. This allocator only works last-in, first-out.
+   `next_free` jumps back to `a`, so the next `alloc` hands out the bytes
+   of `b` a second time. This allocator only works if blocks are freed in
+   the reverse order of their allocation.
    </details>
 
-### Common mistake
+### A common mistake
 
-Thinking `free` returns memory to the operating system. Usually it returns it
-to the allocator's free list, inside your program, ready for the next
-`malloc`.
+Believing that `free` gives memory back to the operating system. Usually
+it only returns the block to the allocator's free list, inside your
+program, ready for the next `malloc`.
